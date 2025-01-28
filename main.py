@@ -16,6 +16,9 @@ from src import Settings
 
 def main():
     args = Settings.load("settings.yaml")
+    print("Using settings: ")
+    print(args)
+    input("Press a key to continue...")
 
     # The last time a recording was retrieved from the queue.
     phrase_time = None
@@ -35,19 +38,20 @@ def main():
     # Prevents permanent application hang and crash by using the wrong Microphone
     if "linux" in platform:
         mic_name = args.default_microphone
-        if not mic_name or mic_name == "list":
-            print("Available microphone devices are: ")
-            for index, name in enumerate(sr.Microphone.list_microphone_names()):
-                print(f'Microphone with name "{name}" found')
-            return
-        else:
-            for index, name in enumerate(sr.Microphone.list_microphone_names()):
-                if mic_name in name:
-                    source = sr.Microphone(sample_rate=16000, device_index=index)
-                    break
+        print(f"Using mic: {mic_name}")
+        print("Available microphone devices are: ")
+        for index, name in enumerate(sr.Microphone.list_microphone_names()):
+            print(f'Microphone with name "{name}" found')
+
+        for index, name in enumerate(sr.Microphone.list_microphone_names()):
+            if mic_name in name:
+                source = sr.Microphone(sample_rate=16000, device_index=index)
+                print(f"Found target mic: '{mic_name}'")
+                break
     else:
         source = sr.Microphone(sample_rate=16000)
 
+    quit()
     # Load / Download model
     model = args.model
     if args.model != "large" and not args.non_english:

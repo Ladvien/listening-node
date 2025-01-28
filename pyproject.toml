@@ -5,17 +5,18 @@ description = ""
 authors = ["C. Thomas Brittain <cthomasbrittain@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
-package-mode = false
+# package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
-llvmlite = "^0.44.0"
-numba = "^0.61.0"
+# llvmlite = "^0.44.0"
+# numba = "^0.61.0"
 openai-whisper = "^20240930"
 speechrecognition = "^3.14.1"
 pyaudio = "^0.2.14"
 pyyaml = "^6.0.2"
 rich = "^13.9.4"
+pip = "^25.0"
 
 
 [build-system]

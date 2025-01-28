@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Settings:
+    mic_name: str
     model: str
     non_english: bool
     energy_threshold: int
