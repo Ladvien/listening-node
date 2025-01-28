@@ -1,11 +1,9 @@
 [package]
+edition = "2021"
 name = "transcription_client"
 version = "0.1.0"
-edition = "2021"
 
 [dependencies]
-cpal = { version = "0.15.3" }
-anyhow = "1.0"
-hound = "3.5"
-ringbuf = "0.4.1"
-clap = { version = "4.0", features = ["derive"] }
+# simple_transcribe_rs = "1.0.1"
+norma = {version = "0.0.3", features = ["metal"]}
+# tokio = {version = "1.35.1", features = ["full"]}
