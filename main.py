@@ -4,7 +4,7 @@ import speech_recognition as sr
 import whisper
 import torch
 from rich import print
-
+import logging
 
 from datetime import datetime, timedelta
 from queue import Queue
@@ -13,6 +13,11 @@ from sys import platform
 
 from src import Settings
 
+logging.basicConfig(
+    filename="talking.log",
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S')
 
 def main():
     args = Settings.load("settings.yaml")
@@ -37,7 +42,7 @@ def main():
     # Important for linux users.
     # Prevents permanent application hang and crash by using the wrong Microphone
     if "linux" in platform:
-        mic_name = args.default_microphone
+        mic_name = args.mic_name
         print(f"Using mic: {mic_name}")
         print("Available microphone devices are: ")
         for index, name in enumerate(sr.Microphone.list_microphone_names()):
@@ -51,7 +56,6 @@ def main():
     else:
         source = sr.Microphone(sample_rate=16000)
 
-    quit()
     # Load / Download model
     model = args.model
     if args.model != "large" and not args.non_english:
@@ -134,9 +138,10 @@ def main():
                 # Clear the console to reprint the updated transcription.
                 os.system("cls" if os.name == "nt" else "clear")
                 for line in transcription:
-                    print(line)
-                    print(f"[red]{segments}[/red]")
-                    print(f"[blue]{language}[/blue]")
+                    logging.info(line)
+                    print(f"[green]{line}[/green]")
+                    # print(f"[red]{segments}[/red]")
+                    # print(f"[blue]{language}[/blue]")
                 # Flush stdout.
                 print("", end="", flush=True)
             else:
