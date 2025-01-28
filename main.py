@@ -4,31 +4,14 @@ import speech_recognition as sr
 import whisper
 import torch
 from rich import print
-import yaml
+
 
 from datetime import datetime, timedelta
 from queue import Queue
 from time import sleep
 from sys import platform
-from dataclasses import dataclass
 
-
-@dataclass
-class Settings:
-    model: str
-    non_english: bool
-    energy_threshold: int
-    record_timeout: float
-    phrase_timeout: float
-    default_microphone: str
-
-    @classmethod
-    def load(cls, path):
-        with open(path, "r") as f:
-            data = yaml.safe_load(f)
-            print(f"Loaded settings from {path}")
-            print(data)
-        return cls(**data)
+from src import Settings
 
 
 def main():
@@ -134,6 +117,8 @@ def main():
                     fp16=torch.cuda.is_available(),
                 )
                 text = result["text"].strip()
+                segments = result["segments"]
+                language = result["language"]
 
                 # If we detected a pause between recordings, add a new item to our transcription.
                 # Otherwise edit the existing one.
@@ -146,6 +131,8 @@ def main():
                 os.system("cls" if os.name == "nt" else "clear")
                 for line in transcription:
                     print(line)
+                    print(f"[red]{segments}[/red]")
+                    print(f"[blue]{language}[/blue]")
                 # Flush stdout.
                 print("", end="", flush=True)
             else:

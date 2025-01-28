@@ -947,6 +947,7 @@ files = [
 [package.dependencies]
 markdown-it-py = ">=2.2.0"
 pygments = ">=2.13.0,<3.0.0"
+typing-extensions = {version = ">=4.0.0,<5.0", markers = "python_version < \"3.11\""}
 
 [package.extras]
 jupyter = ["ipywidgets (>=7.5.1,<9)"]
@@ -1213,5 +1214,5 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.12"
-content-hash = "dfc5b7e8865a5e596dfc60cde75d8f032e0956eb75c2d0e4c26bde48d69753cc"
+python-versions = "^3.10"
+content-hash = "ad3111f478d8a1ce8bb50d43061fdacf3357a2eccd05bf8f7dc662526743738d"
