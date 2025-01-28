@@ -1,0 +1,6 @@
+model: medium # tiny, base, small, medium, large
+non_english: false # true, false
+energy_threshold: 1000 # 0-4000
+record_timeout: 2 # 0-10
+phrase_timeout: 3 # 0-10
+default_microphone: pulse # pulse, list
