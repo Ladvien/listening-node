@@ -1,7 +1,8 @@
-mic_name: "Jabra SPEAK 410 USB: Audio (hw:3,0)"
 model: medium # tiny, base, small, medium, large
 non_english: false # true, false
-energy_threshold: 1000 # 0-4000
+energy_threshold: 3000 # 0-4000
 record_timeout: 2 # 0-10
 phrase_timeout: 3 # 0-10
-default_microphone: pulse # pulse, list
+mic_settings:
+  mic_name: "Jabra SPEAK 410 USB: Audio (hw:3,0)"
+  sample_rate: 16000

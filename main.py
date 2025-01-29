@@ -11,7 +11,7 @@ from queue import Queue
 from time import sleep
 from sys import platform
 
-from src import Settings
+from src import Settings, Mic
 
 
 def main():
@@ -28,6 +28,7 @@ def main():
 
     # We use SpeechRecognizer to record our audio because it has a nice feature where it can detect when speech ends.
     recorder = sr.Recognizer()
+
     # TODO: Could add more settings here.
     recorder.energy_threshold = args.energy_threshold
 
@@ -36,35 +37,18 @@ def main():
 
     # Important for linux users.
     # Prevents permanent application hang and crash by using the wrong Microphone
-    if "linux" in platform:
-        mic_name = args.default_microphone
-        print(f"Using mic: {mic_name}")
-        print("Available microphone devices are: ")
-        for index, name in enumerate(sr.Microphone.list_microphone_names()):
-            print(f'Microphone with name "{name}" found')
+    mic = Mic(settings=args.mic_settings)
 
-        for index, name in enumerate(sr.Microphone.list_microphone_names()):
-            if mic_name in name:
-                source = sr.Microphone(sample_rate=16000, device_index=index)
-                print(f"Found target mic: '{mic_name}'")
-                break
-    else:
-        source = sr.Microphone(sample_rate=16000)
-
-    quit()
     # Load / Download model
     model = args.model
     if args.model != "large" and not args.non_english:
         model = model + ".en"
     audio_model = whisper.load_model(model)
 
-    record_timeout = args.record_timeout
-    phrase_timeout = args.phrase_timeout
-
     transcription = [""]
 
-    with source:
-        recorder.adjust_for_ambient_noise(source)
+    with mic.source:
+        recorder.adjust_for_ambient_noise(mic.source)
 
     def record_callback(_, audio: sr.AudioData) -> None:
         """
@@ -78,7 +62,7 @@ def main():
     # Create a background thread that will pass us raw audio bytes.
     # We could do this manually but SpeechRecognizer provides a nice helper.
     recorder.listen_in_background(
-        source, record_callback, phrase_time_limit=record_timeout
+        mic.source, record_callback, phrase_time_limit=args.record_timeout
     )
 
     # Cue the user that we're ready to go.
@@ -95,7 +79,7 @@ def main():
                 # If enough time has passed between recordings, consider the phrase complete.
                 # Clear the current working audio buffer to start over with the new data.
                 if phrase_time and now - phrase_time > timedelta(
-                    seconds=phrase_timeout
+                    seconds=args.phrase_timeout
                 ):
                     phrase_complete = True
 
