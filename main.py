@@ -4,7 +4,7 @@ import speech_recognition as sr
 import whisper
 import torch
 from rich import print
-
+import logging
 
 from datetime import datetime, timedelta
 from queue import Queue
@@ -118,9 +118,10 @@ def main():
                 # Clear the console to reprint the updated transcription.
                 os.system("cls" if os.name == "nt" else "clear")
                 for line in transcription:
-                    print(line)
-                    print(f"[red]{segments}[/red]")
-                    print(f"[blue]{language}[/blue]")
+                    logging.info(line)
+                    print(f"[green]{line}[/green]")
+                    # print(f"[red]{segments}[/red]")
+                    # print(f"[blue]{language}[/blue]")
                 # Flush stdout.
                 print("", end="", flush=True)
             else:

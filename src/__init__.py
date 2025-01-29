@@ -3,6 +3,7 @@ import rich
 import yaml
 from dataclasses import dataclass
 import speech_recognition
+import logging
 
 
 @dataclass
@@ -45,6 +46,23 @@ class Mic:
 
 
 @dataclass
+class LoggingConfig:
+    level: int
+    filepath: str
+    log_entry_format: str
+    date_format: str
+
+    def __post_init__(self):
+        level = getattr(logging, self.level.upper())
+        logging.basicConfig(
+            filename=self.filepath,
+            format=self.log_entry_format,
+            level=level,
+            datefmt=self.date_format,
+        )
+
+
+@dataclass
 class Settings:
     model: str
     non_english: bool
@@ -52,6 +70,7 @@ class Settings:
     record_timeout: float
     phrase_timeout: float
     mic_settings: MicSettings
+    logging_config: LoggingConfig
 
     @classmethod
     def load(cls, path):
@@ -63,3 +82,4 @@ class Settings:
 
     def __post_init__(self):
         self.mic_settings = MicSettings.load(self.mic_settings)
+        self.logging_config = LoggingConfig(**self.logging_config)
