@@ -12,6 +12,7 @@ from time import sleep
 from sys import platform
 
 from src import Settings, Mic
+from src.recording_device import RecordingDevice
 
 
 @dataclass
@@ -22,7 +23,10 @@ class TranscriptionResult:
 
 
 class WhisperWorker:
-    def __init__(self, args: Settings):
+    def __init__(self, args: Settings, recording_device: RecordingDevice) -> None:
+        self.recording_device = recording_device
+        self.recorder = sr.Recognizer()
+
         # Load / Download model
         self._model = args.model
         if args.model != "large" and not args.non_english:
@@ -35,6 +39,24 @@ class WhisperWorker:
 
         self.transcription = [""]
         self.phrase_time = None
+
+        # Create a background thread that will pass us raw audio bytes.
+        # We could do this manually but SpeechRecognizer provides a nice helper.
+        def record_callback(_, audio: sr.AudioData) -> None:
+            """
+            Threaded callback function to receive audio data when recordings finish.
+            audio: An AudioData containing the recorded bytes.
+            """
+            # Grab the raw bytes and push it into the thread safe queue.
+            data = audio.get_raw_data()
+            self.data_queue.put(data)
+
+        print("Recording...")
+        self.recording_device.recorder.listen_in_background(
+            self.recording_device.mic.source,
+            record_callback,
+            phrase_time_limit=self.args.record_timeout,
+        )
 
     def transcribe(self, audio_np: np.ndarray) -> TranscriptionResult:
         result = self.audio_model.transcribe(
