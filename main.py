@@ -12,6 +12,7 @@ from time import sleep
 from sys import platform
 
 from src import Settings, Mic
+from src.whisper_worker import WhisperWorker
 
 
 def main():
@@ -39,11 +40,7 @@ def main():
     # Prevents permanent application hang and crash by using the wrong Microphone
     mic = Mic(settings=args.mic_settings)
 
-    # Load / Download model
-    model = args.model
-    if args.model != "large" and not args.non_english:
-        model = model + ".en"
-    audio_model = whisper.load_model(model)
+    whisper_worker = WhisperWorker(args)
 
     transcription = [""]
 
@@ -99,21 +96,14 @@ def main():
                 )
 
                 # Read the transcription.
-                result = audio_model.transcribe(
-                    # TODO: Could add more settings here.
-                    audio_np,
-                    fp16=torch.cuda.is_available(),
-                )
-                text = result["text"].strip()
-                segments = result["segments"]
-                language = result["language"]
+                result = whisper_worker.transcribe(audio_np)
 
                 # If we detected a pause between recordings, add a new item to our transcription.
                 # Otherwise edit the existing one.
                 if phrase_complete:
-                    transcription.append(text)
+                    transcription.append(result.text)
                 else:
-                    transcription[-1] = text
+                    transcription[-1] = result.text
 
                 # Clear the console to reprint the updated transcription.
                 os.system("cls" if os.name == "nt" else "clear")

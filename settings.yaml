@@ -8,6 +8,6 @@ mic_settings:
   sample_rate: 16000
 logging_config:
   level: INFO # DEBUG, INFO, WARNING, ERROR, CRITICAL
-  filepath: "talking.txt"
+  filepath: "talking.log"
   log_entry_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
   date_format: str = "%Y-%m-%d %H:%M:%S"
