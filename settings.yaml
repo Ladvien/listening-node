@@ -4,10 +4,10 @@ energy_threshold: 3000 # 0-4000
 record_timeout: 2 # 0-10
 phrase_timeout: 3 # 0-10
 mic_settings:
-  mic_name: "Jabra SPEAK 410 USB: Audio (hw:3,0)"
+  mic_name: "Jabra SPEAK 410 USB: Audio (hw:3,0)" # Linux only
   sample_rate: 16000
 logging_config:
   level: INFO # DEBUG, INFO, WARNING, ERROR, CRITICAL
   filepath: "talking.log"
-  log_entry_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  log_entry_format: "%(asctime)s - %(levelname)s - %(message)s"
   date_format: str = "%Y-%m-%d %H:%M:%S"

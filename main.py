@@ -18,9 +18,8 @@ from src.whisper_worker import WhisperWorker
 
 def main():
     args = Settings.load("settings.yaml")
-    print("Using settings: ")
-    print(args)
-    input("Press a key to continue...")
+    logging.info("Using settings: ")
+    logging.info(args)
 
     # Important for linux users.
     # Prevents permanent application hang and crash by using the wrong Microphone

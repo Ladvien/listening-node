@@ -51,7 +51,6 @@ class WhisperWorker:
             data = audio.get_raw_data()
             self.data_queue.put(data)
 
-        print("Recording...")
         self.recording_device.recorder.listen_in_background(
             self.recording_device.mic.source,
             record_callback,
@@ -59,11 +58,13 @@ class WhisperWorker:
         )
 
     def transcribe(self, audio_np: np.ndarray) -> TranscriptionResult:
+        start_time = datetime.now()
         result = self.audio_model.transcribe(
             # TODO: Could add more settings here.
             audio_np,
             fp16=torch.cuda.is_available(),
         )
+        logging.info(f"Transcription took: {datetime.now() - start_time} seconds.")
 
         return TranscriptionResult(
             text=result["text"].strip(),
