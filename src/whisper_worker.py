@@ -8,7 +8,7 @@ import whisper
 import torch
 from rich import print
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from queue import Queue
 from time import sleep
 
@@ -21,6 +21,7 @@ class TranscriptionResult:
     segments: list
     language: str
     processing_secs: int
+    local_starttime: datetime
 
 
 @dataclass
@@ -118,13 +119,10 @@ class TranscribeSettings:
             if "," in self.clip_timestamps:
                 values = self.clip_timestamps.split(",")
                 self.clip_timestamps = (float(v) for v in values)
-
-        # hallucination_silence_threshold: None # float | None
         if isinstance(self.hallucination_silence_threshold, str):
             self.hallucination_silence_threshold = literal_eval(
                 self.hallucination_silence_threshold
             )
-
         if isinstance(self.temperature, str):
             self.temperature = ast.literal_eval(self.temperature)
 
@@ -178,6 +176,9 @@ class WhisperWorker:
 
     def transcribe(self, audio_np: np.ndarray) -> TranscriptionResult:
 
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        local_datetime = utc_dt.astimezone()  # local time
+
         start_time = datetime.now()
         settings = self.settings.transcribe_settings.to_dict()
         del settings["model"]
@@ -194,6 +195,7 @@ class WhisperWorker:
             segments=result["segments"],
             language=result["language"],
             processing_secs=datetime.now() - start_time,
+            local_starttime=local_datetime,
         )
 
     def listen(self, callback: Optional[Callable[[str, Dict], None]] = None) -> None:
