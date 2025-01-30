@@ -16,6 +16,10 @@ from src.recording_device import RecordingDevice
 from src.whisper_worker import WhisperWorker
 
 
+def transcription_callback(data: str):
+    print(data)
+
+
 def main():
     args = Settings.load("settings.yaml")
     logging.info("Using settings: ")
@@ -34,7 +38,7 @@ def main():
 
     # Cue the user that we're ready to go.
     print("Model loaded.\n")
-    whisper_worker.listen()
+    whisper_worker.listen(transcription_callback)
 
     print("\n\nTranscription:")
 

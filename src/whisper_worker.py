@@ -1,7 +1,7 @@
 from dataclasses import dataclass, asdict
 from ast import literal_eval
 import os
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 import numpy as np
 import speech_recognition as sr
 import whisper
@@ -174,7 +174,7 @@ class WhisperWorker:
             language=result["language"],
         )
 
-    def listen(self):
+    def listen(self, callback: Optional[Callable[[str, Dict], None]] = None) -> None:
         while True:
             try:
                 now = datetime.now(datetime.now().astimezone().tzinfo)
@@ -218,11 +218,9 @@ class WhisperWorker:
                     # os.system("cls" if os.name == "nt" else "clear")
                     for line in self.transcription:
                         logging.info(line)
-                        # print(f"[green]{line}[/green]")
-                        # print(f"[red]{segments}[/red]")
-                        # print(f"[blue]{language}[/blue]")
-                    # Flush stdout.
-                    # print("", end="", flush=True)
+
+                    if callback:
+                        callback(self.transcription, result)
                 else:
                     # Infinite loops are bad for processors, must sleep.
                     sleep(0.25)
