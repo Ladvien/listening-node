@@ -1,7 +1,7 @@
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 
 import yaml
-from .mic import MicSettings, Mic
+from .mic import MicSettings
 from .logging_config import LoggingConfig
 from .whisper_worker import TranscribeSettings
 
@@ -10,6 +10,7 @@ from .whisper_worker import TranscribeSettings
 class WhisperWorkerSettings:
     record_timeout: float
     phrase_timeout: float
+    in_memory: bool
     transcribe_settings: TranscribeSettings
 
     @classmethod

@@ -1,23 +1,13 @@
-import os
-import numpy as np
-import speech_recognition as sr
-import whisper
-import torch
 from rich import print
 import logging
-
-from datetime import datetime, timedelta
-from queue import Queue
-from time import sleep
-from sys import platform
 
 from src import Settings
 from src.recording_device import RecordingDevice
 from src.whisper_worker import WhisperWorker
 
 
-def transcription_callback(data: str):
-    print(data)
+def transcription_callback(text: str, result: dict) -> None:
+    print(result)
 
 
 def main():

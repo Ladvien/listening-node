@@ -1,6 +1,5 @@
 from dataclasses import dataclass, asdict
 from ast import literal_eval
-import os
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 import numpy as np
 import speech_recognition as sr
@@ -11,8 +10,6 @@ import logging
 from datetime import datetime, timedelta
 from queue import Queue
 from time import sleep
-from sys import platform
-from whisper.model import Whisper
 
 from src.recording_device import RecordingDevice
 
@@ -93,7 +90,7 @@ class TranscribeSettings:
     """
 
     model: str
-    verbose: bool
+    verbose: bool | None
     temperature: Union[float, Tuple[float, ...]]
     compression_ratio_threshold: float
     logprob_threshold: float
@@ -111,6 +108,8 @@ class TranscribeSettings:
         return cls(**data)
 
     def __post_init__(self):
+        if isinstance(self.verbose, str):
+            self.verbose = literal_eval(self.verbose)
         if isinstance(self.temperature, str):
             self.temperature = literal_eval(self.temperature)
         if isinstance(self.clip_timestamps, str):
@@ -132,7 +131,10 @@ class WhisperWorker:
 
         # Load / Download model
         print(f"Loading model: {self.settings.transcribe_settings.model}")
-        self.audio_model = whisper.load_model(self.settings.transcribe_settings.model)
+        self.audio_model = whisper.load_model(
+            self.settings.transcribe_settings.model,
+            in_memory=self.settings.in_memory,
+        )
 
         # Thread safe Queue for passing data from the threaded recording callback.
         self.data_queue = Queue()
@@ -213,11 +215,6 @@ class WhisperWorker:
                         self.transcription.append(result.text)
                     else:
                         self.transcription[-1] = result.text
-
-                    # Clear the console to reprint the updated transcription.
-                    # os.system("cls" if os.name == "nt" else "clear")
-                    for line in self.transcription:
-                        logging.info(line)
 
                     if callback:
                         callback(self.transcription, result)

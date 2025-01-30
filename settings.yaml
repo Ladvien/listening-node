@@ -6,6 +6,7 @@ mic_settings:
 whisper_worker:
   record_timeout: 2 # 0-10
   phrase_timeout: 3 # 0-10
+  in_memory: True
   transcribe_settings:
     #  'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large', 'large-v3-turbo', 'turbo'
     model: medium.en
@@ -42,6 +43,14 @@ whisper_worker:
     # Extract word-level timestamps using the cross-attention
     # pattern and dynamic time warping, and include the timestamps
     # for each word in each segment.
+    # NOTE: Setting this to true also adds word level data to the
+    # output, which can be useful for downstream processing.  E.g.,
+    # {
+    #   'word': 'test',
+    #   'start': np.float64(1.0),
+    #   'end': np.float64(1.6),
+    #   'probability': np.float64(0.8470910787582397)
+    # }
     word_timestamps: True # False
 
     # If word_timestamps is True, merge these punctuation symbols
