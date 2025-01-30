@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import os
+from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 import speech_recognition as sr
 import whisper
@@ -10,8 +11,9 @@ from datetime import datetime, timedelta
 from queue import Queue
 from time import sleep
 from sys import platform
+from whisper.model import Whisper
 
-from src import Settings, Mic
+
 from src.recording_device import RecordingDevice
 
 
@@ -22,14 +24,40 @@ class TranscriptionResult:
     language: str
 
 
+@dataclass
+class ModelConfig:
+    model: str
+    audio: Union[str, np.ndarray, torch.Tensor]
+    verbose: bool
+    temperature: Union[float, Tuple[float, ...]]
+    compression_ratio_threshold: float
+    logprob_threshold: float
+    no_speech_threshold: float
+    condition_on_previous_text: bool
+    word_timestamps: bool
+    prepend_punctuations: str
+    append_punctuations: str
+    initial_prompt: Optional[str]
+    decode_options: Dict
+    clip_timestamps: Union[str, List[float]]
+    hallucination_silence_threshold: Optional[float]
+
+    @classmethod
+    def load(cls, data):
+        return cls(**data)
+
+
 class WhisperWorker:
-    def __init__(self, args: Settings, recording_device: RecordingDevice) -> None:
+    # TODO: def __init__(self, args: Settings, recording_device: RecordingDevice) -> None:
+    def __init__(self, args: Any, recording_device: RecordingDevice) -> None:
+
         self.recording_device = recording_device
         self.recorder = sr.Recognizer()
 
         # Load / Download model
-        self._model = args.model
-        if args.model != "large" and not args.non_english:
+        self._model = args.model_config.model
+        print(f"Loading model: {self._model}")
+        if args.model_size != "large" and not args.non_english:
             model = self._model + ".en"
         self.audio_model = whisper.load_model(model)
 

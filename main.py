@@ -11,7 +11,7 @@ from queue import Queue
 from time import sleep
 from sys import platform
 
-from src import Settings, Mic
+from src import Settings
 from src.recording_device import RecordingDevice
 from src.whisper_worker import WhisperWorker
 
@@ -23,8 +23,9 @@ def main():
 
     # Important for linux users.
     # Prevents permanent application hang and crash by using the wrong Microphone
-
-    recording_device = RecordingDevice(args)
+    print(args)
+    input("Press Enter to continue...")
+    recording_device = RecordingDevice(args.mic_settings)
     whisper_worker = WhisperWorker(args, recording_device)
 
     transcription = [""]

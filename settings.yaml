@@ -1,11 +1,57 @@
-model: medium # tiny, base, small, medium, large
+model_size: medium # tiny, base, small, medium, large
 non_english: false # true, false
-energy_threshold: 3000 # 0-4000
 record_timeout: 2 # 0-10
 phrase_timeout: 3 # 0-10
+model_config:
+  # The Whisper model instance
+  model: whisper
+
+  # The path to the audio file to open, or the audio waveform
+  audio: Union[str, np.ndarray, torch.Tensor]
+
+  # Whether to display the text being decoded to the console. If True, displays all the details, If False, displays minimal details. If None, does not display anything
+  verbose: bool
+
+  # Temperature for sampling. It can be a tuple of temperatures, which will be successively used upon failures according to either compression_ratio_threshold or logprob_threshold.
+  temperature: Union[float, Tuple[float, ...]]
+
+  # If the gzip compression ratio is above this value, treat as failed
+  compression_ratio_threshold: float
+
+  # If the average log probability over sampled tokens is below this value, treat as failed
+  logprob_threshold: float
+
+  # If the no_speech probability is higher than this value AND the average log probability over sampled tokens is below logprob_threshold, consider the segment as silent
+  no_speech_threshold: float
+
+  # if True, the previous output of the model is provided as a prompt for the next window; disabling may make the text inconsistent across windows, but the model becomes less prone to getting stuck in a failure loop, such as repetition looping or timestamps going out of sync.
+  condition_on_previous_text: bool
+
+  # Extract word-level timestamps using the cross-attention pattern and dynamic time warping, and include the timestamps for each word in each segment.
+  word_timestamps: bool
+
+  # If word_timestamps is True, merge these punctuation symbols with the next word
+  prepend_punctuations: str
+
+  # If word_timestamps is True, merge these punctuation symbols with the previous word
+  append_punctuations: str
+
+  # Optional text to provide as a prompt for the first window. This can be used to provide, or "prompt-engineer" a context for transcription, e.g. custom vocabularies or proper nouns to make it more likely to predict those word correctly.
+  initial_prompt: Optional[str]
+
+  # Keyword arguments to construct DecodingOptions instances
+  decode_options: dict
+
+  # Comma-separated list start,end,start,end,... timestamps (in seconds) of clips to process. The last end timestamp defaults to the end of the file.
+  clip_timestamps: Union[str, List[float]]
+
+  # When word_timestamps is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected
+  hallucination_silence_threshold: Optional[float]
+
 mic_settings:
   mic_name: "Jabra SPEAK 410 USB: Audio (hw:3,0)" # Linux only
   sample_rate: 16000
+  energy_threshold: 3000 # 0-4000
 logging_config:
   level: INFO # DEBUG, INFO, WARNING, ERROR, CRITICAL
   filepath: "talking.log"
