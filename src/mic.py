@@ -36,6 +36,8 @@ class Mic:
                     )
                     print(f"Found target mic: '{self.settings.mic_name}'")
                     break
+                
+                print(f"Target not found: {self.settings.mic_name}")
 
         else:
             self.source = speech_recognition.Microphone(

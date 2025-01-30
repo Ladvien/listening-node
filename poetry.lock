@@ -242,17 +242,6 @@ files = [
 all = ["flake8 (>=7.1.1)", "mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
 
 [[package]]
-name = "jack"
-version = "0.1.0"
-description = "A command line tool for time-based queries on log files."
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "jack-0.1.0.tar.gz", hash = "sha256:7a6f86c3d1ca758c84e145789032325a40e96918d1b980f64d5cce6d393adb81"},
-]
-
-[[package]]
 name = "jinja2"
 version = "3.1.5"
 description = "A very fast and expressive template engine."
@@ -1285,4 +1274,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "49dd1943b5d7212c4e8f17577a16a768874b95d5c7be7d74b6b6dbac227f3b94"
+content-hash = "a40725f19551c26dd97309f4570101da32f5a090b72d19d998e923a7d6422a1b"
