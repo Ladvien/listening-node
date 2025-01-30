@@ -16,12 +16,64 @@ from src.recording_device import RecordingDevice
 
 
 @dataclass
+class Word:
+    word: str
+    start: float
+    end: float
+    probability: float
+
+    @classmethod
+    def load(cls, data):
+        return cls(**data)
+
+    def to_dict(self):
+        return asdict(self)
+
+
+@dataclass
+class Segment:
+    id: int
+    seek: int
+    start: float
+    end: float
+    text: str
+    tokens: List[int]
+    temperature: float
+    avg_logprob: float
+    compression_ratio: float
+    no_speech_prob: float
+    words: List[Word]
+
+    def __post_init__(self):
+        self.words = [Word(**word) for word in self.words]
+
+    @classmethod
+    def load(cls, data):
+        return cls(**data)
+
+    def to_dict(self):
+        return asdict(self)
+
+
+@dataclass
 class TranscriptionResult:
     text: str
-    segments: list
+    segments: list[Segment]
     language: str
     processing_secs: int
     local_starttime: datetime
+
+    def __post_init__(self):
+        for key, value in self.__dict__.items():
+            if isinstance(value, datetime):
+                self.__dict__[key] = value.isoformat()
+
+    @classmethod
+    def load(cls, data):
+        return cls(**data)
+
+    def to_dict(self):
+        return asdict(self)
 
 
 @dataclass
@@ -188,11 +240,13 @@ class WhisperWorker:
             **settings,
         )
 
-        result["segments"] = self._deep_convert_np_float_to_str(result["segments"])
+        result["segments"] = self._deep_convert_np_float_to_float(result["segments"])
+
+        segments = [Segment(**segment) for segment in result["segments"]]
 
         return TranscriptionResult(
             text=result["text"].strip(),
-            segments=result["segments"],
+            segments=segments,
             language=result["language"],
             processing_secs=datetime.now() - start_time,
             local_starttime=local_datetime,
@@ -252,23 +306,23 @@ class WhisperWorker:
             seconds=self.settings.phrase_timeout
         )
 
-    def _deep_convert_np_float_to_str(self, data: dict) -> dict:
+    def _deep_convert_np_float_to_float(self, data: dict) -> dict:
 
         if isinstance(data, dict):
             for key, value in data.items():
                 if isinstance(value, np.float64):
                     data[key] = float(value)
                 if isinstance(value, list):
-                    data[key] = self._deep_convert_np_float_to_str(value)
+                    data[key] = self._deep_convert_np_float_to_float(value)
                 elif isinstance(value, dict):
-                    data[key] = self._deep_convert_np_float_to_str(value)
+                    data[key] = self._deep_convert_np_float_to_float(value)
         if isinstance(data, list):
             for i, value in enumerate(data):
                 if isinstance(value, np.float64):
                     data[i] = float(value)
                 if isinstance(value, list):
-                    data[i] = self._deep_convert_np_float_to_str(value)
+                    data[i] = self._deep_convert_np_float_to_float(value)
                 elif isinstance(value, dict):
-                    data[i] = self._deep_convert_np_float_to_str(value)
+                    data[i] = self._deep_convert_np_float_to_float(value)
 
         return data

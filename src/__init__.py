@@ -25,7 +25,7 @@ class WhisperWorkerSettings:
 class Settings:
     whisper_worker: WhisperWorkerSettings
     mic_settings: MicSettings
-    logging_config: LoggingConfig
+    logging_config: LoggingConfig | None = None
 
     @classmethod
     def load(cls, path):
@@ -38,4 +38,5 @@ class Settings:
     def __post_init__(self):
         self.whisper_worker = WhisperWorkerSettings.load(self.whisper_worker)
         self.mic_settings = MicSettings.load(self.mic_settings)
-        self.logging_config = LoggingConfig(**self.logging_config)
+        if self.logging_config:
+            self.logging_config = LoggingConfig(**self.logging_config)
