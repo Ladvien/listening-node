@@ -1,23 +1,23 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 import yaml
 from .mic import MicSettings, Mic
 from .logging_config import LoggingConfig
-from .whisper_worker import ModelConfig
+from .whisper_worker import TranscribeSettings
 
 
 @dataclass
 class WhisperWorkerSettings:
     record_timeout: float
     phrase_timeout: float
-    transcribe_settings: ModelConfig
+    transcribe_settings: TranscribeSettings
 
     @classmethod
     def load(cls, data):
         return cls(**data)
 
     def __post_init__(self):
-        self.transcribe_settings = ModelConfig.load(self.transcribe_settings)
+        self.transcribe_settings = TranscribeSettings.load(self.transcribe_settings)
 
 
 @dataclass

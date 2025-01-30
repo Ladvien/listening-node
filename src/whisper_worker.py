@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+from ast import literal_eval
 import os
 from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
@@ -24,7 +25,73 @@ class TranscriptionResult:
 
 
 @dataclass
-class ModelConfig:
+class TranscribeSettings:
+    """
+      transcribe_settings:
+    #  'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large', 'large-v3-turbo', 'turbo'
+    model: medium
+
+    # Whether to display the text being decoded to the console. If True, displays all the details, If False, displays minimal details. If None, does not display anything
+    verbose: False
+
+    # Temperature for sampling. It can be a tuple of temperatures,
+    # which will be successively used upon failures according to
+    # either compression_ratio_threshold or logprob_threshold.
+    temperature: "(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)" # "(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)"
+
+    # If the gzip compression ratio is above this value,
+    # treat as failed
+    compression_ratio_threshold: 2.4 # 2.4
+
+    # If the average log probability over sampled tokens is below this value, treat as failed
+    logprob_threshold: -1.0 # -1.0
+
+    # If the no_speech probability is higher than this value AND
+    # the average log probability over sampled tokens is below
+    # logprob_threshold, consider the segment as silent
+    no_speech_threshold: 0.6 # 0.6
+
+    # if True, the previous output of the model is provided as a
+    # prompt for the next window; disabling may make the text
+    # inconsistent across windows, but the model becomes less
+    # prone to getting stuck in a failure loop, such as repetition
+    # looping or timestamps going out of sync.
+    condition_on_previous_text: True # True
+
+    # Extract word-level timestamps using the cross-attention
+    # pattern and dynamic time warping, and include the timestamps
+    # for each word in each segment.
+    word_timestamps: False # False
+
+    # If word_timestamps is True, merge these punctuation symbols
+    # with the next word
+    prepend_punctuations: >
+      "\"'“¿([{-"
+
+    # If word_timestamps is True, merge these punctuation symbols with the previous word
+    append_punctuations: >
+      "\"'.。,，!！?？:：”)]}、"
+
+    # Optional text to provide as a prompt for the first window.
+    # This can be used to provide, or "prompt-engineer" a context
+    # for transcription, e.g. custom vocabularies or proper nouns
+    # to make it more likely to predict those word correctly.
+    initial_prompt: "" # ""
+
+    # Keyword arguments to construct DecodingOptions instances
+    decode_options: dict
+
+    # Comma-separated list start,end,start,end,... timestamps
+    # (in seconds) of clips to process. The last end timestamp
+    # defaults to the end of the file.
+    clip_timestamps: Union[str, List[float]]
+
+    # When word_timestamps is True, skip silent periods longer
+    # than this threshold (in seconds) when a possible
+    # hallucination is detected
+    hallucination_silence_threshold: ""
+    """
+
     model: str
     verbose: bool
     temperature: Union[float, Tuple[float, ...]]
@@ -36,13 +103,23 @@ class ModelConfig:
     prepend_punctuations: str
     append_punctuations: str
     initial_prompt: Optional[str]
-    decode_options: Dict
     clip_timestamps: Union[str, List[float]]
     hallucination_silence_threshold: Optional[float]
 
     @classmethod
     def load(cls, data):
         return cls(**data)
+
+    def __post_init__(self):
+        if isinstance(self.temperature, str):
+            self.temperature = literal_eval(self.temperature)
+        if isinstance(self.clip_timestamps, str):
+            if "," in self.clip_timestamps:
+                values = self.clip_timestamps.split(",")
+                self.clip_timestamps = (float(v) for v in values)
+
+    def to_dict(self):
+        return asdict(self)
 
 
 class WhisperWorker:
@@ -82,10 +159,12 @@ class WhisperWorker:
 
     def transcribe(self, audio_np: np.ndarray) -> TranscriptionResult:
         start_time = datetime.now()
+        settings = self.settings.transcribe_settings.to_dict()
+        del settings["model"]
         result = self.audio_model.transcribe(
-            # TODO: Could add more settings here.
             audio_np,
             fp16=torch.cuda.is_available(),
+            **settings,
         )
         logging.info(f"Transcription took: {datetime.now() - start_time} seconds.")
 
@@ -136,14 +215,14 @@ class WhisperWorker:
                         self.transcription[-1] = result.text
 
                     # Clear the console to reprint the updated transcription.
-                    os.system("cls" if os.name == "nt" else "clear")
+                    # os.system("cls" if os.name == "nt" else "clear")
                     for line in self.transcription:
                         logging.info(line)
-                        print(f"[green]{line}[/green]")
+                        # print(f"[green]{line}[/green]")
                         # print(f"[red]{segments}[/red]")
                         # print(f"[blue]{language}[/blue]")
                     # Flush stdout.
-                    print("", end="", flush=True)
+                    # print("", end="", flush=True)
                 else:
                     # Infinite loops are bad for processors, must sleep.
                     sleep(0.25)

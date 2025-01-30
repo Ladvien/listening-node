@@ -24,7 +24,6 @@ def main():
     # Important for linux users.
     # Prevents permanent application hang and crash by using the wrong Microphone
     print(args)
-    input("Press Enter to continue...")
     recording_device = RecordingDevice(args.mic_settings)
     whisper_worker = WhisperWorker(
         args.whisper_worker,

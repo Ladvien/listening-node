@@ -8,49 +8,71 @@ whisper_worker:
   phrase_timeout: 3 # 0-10
   transcribe_settings:
     #  'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large', 'large-v3-turbo', 'turbo'
-    model: medium
+    model: medium.en
 
-    # Whether to display the text being decoded to the console. If True, displays all the details, If False, displays minimal details. If None, does not display anything
-    verbose: False
+    # Whether to display the text being decoded to the console.
+    # If True, displays all the details, If False, displays
+    # minimal details. If None, does not display anything
+    verbose: True
 
-    # Temperature for sampling. It can be a tuple of temperatures, which will be successively used upon failures according to either compression_ratio_threshold or logprob_threshold.
-    temperature: Union[float, Tuple[float, ...]]
+    # Temperature for sampling. It can be a tuple of temperatures,
+    # which will be successively used upon failures according to
+    # either compression_ratio_threshold or logprob_threshold.
+    temperature: "(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)" # "(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)"
 
-    # If the gzip compression ratio is above this value, treat as failed
-    compression_ratio_threshold: float
+    # If the gzip compression ratio is above this value,
+    # treat as failed
+    compression_ratio_threshold: 2.4 # 2.4
 
     # If the average log probability over sampled tokens is below this value, treat as failed
-    logprob_threshold: float
+    logprob_threshold: -1.0 # -1.0
 
-    # If the no_speech probability is higher than this value AND the average log probability over sampled tokens is below logprob_threshold, consider the segment as silent
-    no_speech_threshold: float
+    # If the no_speech probability is higher than this value AND
+    # the average log probability over sampled tokens is below
+    # logprob_threshold, consider the segment as silent
+    no_speech_threshold: 0.6 # 0.6
 
-    # if True, the previous output of the model is provided as a prompt for the next window; disabling may make the text inconsistent across windows, but the model becomes less prone to getting stuck in a failure loop, such as repetition looping or timestamps going out of sync.
-    condition_on_previous_text: bool
+    # if True, the previous output of the model is provided as a
+    # prompt for the next window; disabling may make the text
+    # inconsistent across windows, but the model becomes less
+    # prone to getting stuck in a failure loop, such as repetition
+    # looping or timestamps going out of sync.
+    condition_on_previous_text: True # True
 
-    # Extract word-level timestamps using the cross-attention pattern and dynamic time warping, and include the timestamps for each word in each segment.
-    word_timestamps: bool
+    # Extract word-level timestamps using the cross-attention
+    # pattern and dynamic time warping, and include the timestamps
+    # for each word in each segment.
+    word_timestamps: True # False
 
-    # If word_timestamps is True, merge these punctuation symbols with the next word
-    prepend_punctuations: str
+    # If word_timestamps is True, merge these punctuation symbols
+    # with the next word
+
+    prepend_punctuations: '"''“¿([{-'
 
     # If word_timestamps is True, merge these punctuation symbols with the previous word
-    append_punctuations: str
+    append_punctuations: '"''.。,，!！?？:：”)]}、'
 
-    # Optional text to provide as a prompt for the first window. This can be used to provide, or "prompt-engineer" a context for transcription, e.g. custom vocabularies or proper nouns to make it more likely to predict those word correctly.
-    initial_prompt: Optional[str]
+    # Optional text to provide as a prompt for the first window.
+    # This can be used to provide, or "prompt-engineer" a context
+    # for transcription, e.g. custom vocabularies or proper nouns
+    # to make it more likely to predict those word correctly.
+    initial_prompt: "" # ""
+
+    # Comma-separated list start,end,start,end,... timestamps
+    # (in seconds) of clips to process. The last end timestamp
+    # defaults to the end of the file.
+    clip_timestamps: "0" # "0"
+
+    # When word_timestamps is True, skip silent periods longer
+    # than this threshold (in seconds) when a possible
+    # hallucination is detected
+    hallucination_silence_threshold: ""
 
     # Keyword arguments to construct DecodingOptions instances
-    decode_options: dict
-
-    # Comma-separated list start,end,start,end,... timestamps (in seconds) of clips to process. The last end timestamp defaults to the end of the file.
-    clip_timestamps: Union[str, List[float]]
-
-    # When word_timestamps is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected
-    hallucination_silence_threshold: Optional[float]
+    # TODO: How can DecodingOptions work?
 
 logging_config:
   level: INFO # DEBUG, INFO, WARNING, ERROR, CRITICAL
   filepath: "talking.log"
   log_entry_format: "%(asctime)s - %(levelname)s - %(message)s"
-  date_format: str = "%Y-%m-%d %H:%M:%S"
+  date_format: "%Y-%m-%d %H:%M:%S"
