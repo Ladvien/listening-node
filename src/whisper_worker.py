@@ -13,7 +13,6 @@ from time import sleep
 from sys import platform
 from whisper.model import Whisper
 
-
 from src.recording_device import RecordingDevice
 
 
@@ -27,7 +26,6 @@ class TranscriptionResult:
 @dataclass
 class ModelConfig:
     model: str
-    audio: Union[str, np.ndarray, torch.Tensor]
     verbose: bool
     temperature: Union[float, Tuple[float, ...]]
     compression_ratio_threshold: float
@@ -48,22 +46,19 @@ class ModelConfig:
 
 
 class WhisperWorker:
-    # TODO: def __init__(self, args: Settings, recording_device: RecordingDevice) -> None:
-    def __init__(self, args: Any, recording_device: RecordingDevice) -> None:
+    # TODO: def __init__(self, args: WhisperWorkerSettings, recording_device: RecordingDevice) -> None:
+    def __init__(self, settings: Any, recording_device: RecordingDevice) -> None:
 
+        self.settings = settings
         self.recording_device = recording_device
         self.recorder = sr.Recognizer()
 
         # Load / Download model
-        self._model = args.model_config.model
-        print(f"Loading model: {self._model}")
-        if args.model_size != "large" and not args.non_english:
-            model = self._model + ".en"
-        self.audio_model = whisper.load_model(model)
+        print(f"Loading model: {self.settings.transcribe_settings.model}")
+        self.audio_model = whisper.load_model(self.settings.transcribe_settings.model)
 
         # Thread safe Queue for passing data from the threaded recording callback.
         self.data_queue = Queue()
-        self.args = args
 
         self.transcription = [""]
         self.phrase_time = None
@@ -82,7 +77,7 @@ class WhisperWorker:
         self.recording_device.recorder.listen_in_background(
             self.recording_device.mic.source,
             record_callback,
-            phrase_time_limit=self.args.record_timeout,
+            phrase_time_limit=self.settings.record_timeout,
         )
 
     def transcribe(self, audio_np: np.ndarray) -> TranscriptionResult:
@@ -158,5 +153,5 @@ class WhisperWorker:
     def _phrase_complete(self, phrase_time: datetime, now: datetime) -> bool:
 
         return phrase_time and now - phrase_time > timedelta(
-            seconds=self.args.phrase_timeout
+            seconds=self.settings.phrase_timeout
         )

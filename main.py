@@ -26,7 +26,10 @@ def main():
     print(args)
     input("Press Enter to continue...")
     recording_device = RecordingDevice(args.mic_settings)
-    whisper_worker = WhisperWorker(args, recording_device)
+    whisper_worker = WhisperWorker(
+        args.whisper_worker,
+        recording_device,
+    )
 
     transcription = [""]
 

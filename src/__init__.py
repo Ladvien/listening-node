@@ -7,13 +7,22 @@ from .whisper_worker import ModelConfig
 
 
 @dataclass
-class Settings:
-    # model: str
-    model_size: str
-    non_english: bool
+class WhisperWorkerSettings:
     record_timeout: float
     phrase_timeout: float
-    model_config: ModelConfig
+    transcribe_settings: ModelConfig
+
+    @classmethod
+    def load(cls, data):
+        return cls(**data)
+
+    def __post_init__(self):
+        self.transcribe_settings = ModelConfig.load(self.transcribe_settings)
+
+
+@dataclass
+class Settings:
+    whisper_worker: WhisperWorkerSettings
     mic_settings: MicSettings
     logging_config: LoggingConfig
 
@@ -26,6 +35,6 @@ class Settings:
         return cls(**data)
 
     def __post_init__(self):
-        self.model_config = ModelConfig.load(self.model_config)
+        self.whisper_worker = WhisperWorkerSettings.load(self.whisper_worker)
         self.mic_settings = MicSettings.load(self.mic_settings)
         self.logging_config = LoggingConfig(**self.logging_config)
