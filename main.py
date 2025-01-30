@@ -24,16 +24,9 @@ def main():
         recording_device,
     )
 
-    transcription = [""]
-
     # Cue the user that we're ready to go.
     print("Model loaded.\n")
     whisper_worker.listen(transcription_callback)
-
-    print("\n\nTranscription:")
-
-    for line in transcription:
-        print(line)
 
 
 if __name__ == "__main__":

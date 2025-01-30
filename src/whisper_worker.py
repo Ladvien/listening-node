@@ -1,3 +1,4 @@
+import ast
 from dataclasses import dataclass, asdict
 from ast import literal_eval
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
@@ -19,6 +20,7 @@ class TranscriptionResult:
     text: str
     segments: list
     language: str
+    processing_secs: int
 
 
 @dataclass
@@ -117,6 +119,21 @@ class TranscribeSettings:
                 values = self.clip_timestamps.split(",")
                 self.clip_timestamps = (float(v) for v in values)
 
+        # hallucination_silence_threshold: None # float | None
+        if isinstance(self.hallucination_silence_threshold, str):
+            self.hallucination_silence_threshold = literal_eval(
+                self.hallucination_silence_threshold
+            )
+
+        if isinstance(self.temperature, str):
+            self.temperature = ast.literal_eval(self.temperature)
+
+        if isinstance(self.logprob_threshold, str):
+            self.logprob_threshold = float(self.logprob_threshold)
+
+        if isinstance(self.no_speech_threshold, str):
+            self.no_speech_threshold = float(self.no_speech_threshold)
+
     def to_dict(self):
         return asdict(self)
 
@@ -160,6 +177,7 @@ class WhisperWorker:
         )
 
     def transcribe(self, audio_np: np.ndarray) -> TranscriptionResult:
+
         start_time = datetime.now()
         settings = self.settings.transcribe_settings.to_dict()
         del settings["model"]
@@ -168,12 +186,14 @@ class WhisperWorker:
             fp16=torch.cuda.is_available(),
             **settings,
         )
-        logging.info(f"Transcription took: {datetime.now() - start_time} seconds.")
+
+        result["segments"] = self._deep_convert_np_float_to_str(result["segments"])
 
         return TranscriptionResult(
             text=result["text"].strip(),
             segments=result["segments"],
             language=result["language"],
+            processing_secs=datetime.now() - start_time,
         )
 
     def listen(self, callback: Optional[Callable[[str, Dict], None]] = None) -> None:
@@ -229,3 +249,24 @@ class WhisperWorker:
         return phrase_time and now - phrase_time > timedelta(
             seconds=self.settings.phrase_timeout
         )
+
+    def _deep_convert_np_float_to_str(self, data: dict) -> dict:
+
+        if isinstance(data, dict):
+            for key, value in data.items():
+                if isinstance(value, np.float64):
+                    data[key] = float(value)
+                if isinstance(value, list):
+                    data[key] = self._deep_convert_np_float_to_str(value)
+                elif isinstance(value, dict):
+                    data[key] = self._deep_convert_np_float_to_str(value)
+        if isinstance(data, list):
+            for i, value in enumerate(data):
+                if isinstance(value, np.float64):
+                    data[i] = float(value)
+                if isinstance(value, list):
+                    data[i] = self._deep_convert_np_float_to_str(value)
+                elif isinstance(value, dict):
+                    data[i] = self._deep_convert_np_float_to_str(value)
+
+        return data

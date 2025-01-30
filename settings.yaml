@@ -75,7 +75,7 @@ whisper_worker:
     # When word_timestamps is True, skip silent periods longer
     # than this threshold (in seconds) when a possible
     # hallucination is detected
-    hallucination_silence_threshold: ""
+    hallucination_silence_threshold: None # float | None
 
     # Keyword arguments to construct DecodingOptions instances
     # TODO: How can DecodingOptions work?
