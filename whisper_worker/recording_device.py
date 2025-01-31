@@ -1,5 +1,4 @@
 import speech_recognition as sr
-from rich import print
 from .mic import Mic, MicSettings
 
 

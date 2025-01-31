@@ -1,9 +1,7 @@
 from rich import print
 import logging
 
-from src import Settings
-from src.recording_device import RecordingDevice
-from src.whisper_worker import WhisperWorker
+from whisper_worker import Settings,RecordingDevice,WhisperWorker
 
 
 def transcription_callback(text: str, result: dict) -> None:

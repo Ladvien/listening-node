@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import yaml
 from .mic import MicSettings
 from .logging_config import LoggingConfig
-from .whisper_worker import TranscribeSettings
+from .transcription import TranscribeSettings
 
 
 @dataclass
@@ -31,8 +31,6 @@ class Settings:
     def load(cls, path):
         with open(path, "r") as f:
             data = yaml.safe_load(f)
-            print(f"Loaded settings from {path}")
-            print(data)
         return cls(**data)
 
     def __post_init__(self):

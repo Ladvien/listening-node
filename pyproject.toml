@@ -1,11 +1,10 @@
 [tool.poetry]
-name = "transcription-client"
+name = "whisper-worker"
 version = "0.0.1"
 description = ""
 authors = ["C. Thomas Brittain <cthomasbrittain@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
-# package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"

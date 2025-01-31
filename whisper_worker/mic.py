@@ -1,7 +1,7 @@
 from sys import platform
 from dataclasses import dataclass
 import speech_recognition
-
+from rich import print
 
 @dataclass
 class MicSettings:
