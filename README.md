@@ -16,10 +16,12 @@ pip install whisper-worker
 ### MacOS
 1. Install `brew install portaudio`
 
-## Disclaimer
-The core of th
+## Attribution
+The core of this code was heavily influenced and includes some code from:
 - https://github.com/davabase/whisper_real_time/tree/master
 - https://github.com/openai/whisper/discussions/608
+
+Huge thanks to [davabase](https://github.com/davabase) for the initial code!  All I've done is wrap it up in a nice package.
 
 ## Examples
 
