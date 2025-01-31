@@ -1,5 +1,7 @@
 ## Setup
-A simple method for using whisper to transcribe audio in real-time.
+A simple toolset for using [Whisper](https://openai.com/index/whisper/) models to transcribe audio in real-time.
+
+The `whisper_worker` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The modules is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a settings file (see bottom).
 
 ## Install
 ```
@@ -11,42 +13,97 @@ pip install whisper-worker
 ### MacOS
 1. Install `brew install portaudio`
 
-## Sources
+## Disclaimer
+The core of th
 - https://github.com/davabase/whisper_real_time/tree/master
 - https://github.com/openai/whisper/discussions/608
 
 ## Examples
-```python
-from whisper_worker import Settings,RecordingDevice,WhisperWorker
 
-def transcription_callback(text: str, result: dict) -> None:
+Below is a basic example of how to use the whisper worker to transcribe audio in real-time.
+```python
+from rich import print
+
+from whisper_worker import Settings, RecordingDevice, WhisperWorker, TranscriptionResult
+
+def transcription_callback(text: str, result: TranscriptionResult) -> None:
+    print("Here's what I heard: ")
     print(result)
 
-args = Settings.load("settings.yaml")
-logging.info("Using settings: ")
-logging.info(args)
+settings = Settings.load("settings.yaml")
 
-# Important for linux users.
-# Prevents permanent application hang and crash by using the wrong Microphone
-print(args)
-recording_device = RecordingDevice(args.mic_settings)
+recording_device = RecordingDevice(settings.mic_settings)
 whisper_worker = WhisperWorker(
-    args.whisper_worker,
+    settings.whisper_worker,
     recording_device,
 )
 
-# Cue the user that we're ready to go.
-print("Model loaded.\n")
 whisper_worker.listen(transcription_callback)
-
 ```
 
 The `transcription_callback` function is called when a transcription is completed. 
 
+### Sending Transcription to REST API
+```python
+import requests
+from whisper_worker import Settings, RecordingDevice, WhisperWorker, TranscriptionResult
+
+
+def transcription_callback(text: str, result: TranscriptionResult) -> None:
+    # Send the transcription to a REST API
+    requests.post(
+        "http://localhost:5000/transcribe",
+        json={"text": text, "result": result.to_dict()}
+    )
+
+settings = Settings.load("settings.yaml")
+recording_device = RecordingDevice(settings.mic_settings)
+whisper_worker = WhisperWorker(
+    settings.whisper_worker,
+    recording_device,
+)
+whisper_worker.listen(transcription_callback)
+```
+
+The `TranscriptionResult` object has a `.to_dict()` method that converts the object to a dictionary, which can be serialized to JSON.
+
+```json
+{
+    'text': 'This is only a test of words.',
+    'segments': [
+        {
+            'id': 0,
+            'seek': 0,
+            'start': 0.0,
+            'end': 1.8,
+            'text': ' This is only a test of words.',
+            'tokens': [50363, 770, 318, 691, 257, 1332, 286, 2456, 13, 50463],
+            'temperature': 0.0,
+            'avg_logprob': -0.43947878750887787,
+            'compression_ratio': 0.8285714285714286,
+            'no_speech_prob': 0.0012085052439942956,
+            'words': [
+                {'word': ' This', 'start': 0.0, 'end': 0.36, 'probability': 0.750191330909729},
+                {'word': ' is', 'start': 0.36, 'end': 0.54, 'probability': 0.997636079788208},
+                {'word': ' only', 'start': 0.54, 'end': 0.78, 'probability': 0.998072624206543},
+                {'word': ' a', 'start': 0.78, 'end': 1.02, 'probability': 0.9984667897224426},
+                {'word': ' test', 'start': 1.02, 'end': 1.28, 'probability': 0.9980781078338623},
+                {'word': ' of', 'start': 1.28, 'end': 1.48, 'probability': 0.99817955493927},
+                {'word': ' words.', 'start': 1.48, 'end': 1.8, 'probability': 0.9987621307373047}
+            ]
+        }
+    ],
+    'language': 'en',
+    'processing_secs': 5.410359,
+    'local_starttime': '2025-01-31T06:19:03.322642-06:00',
+    'processing_rolling_avg_secs': 22.098183908976
+}
+```
+
 ## Settings
+Settings control all aspects of the audio recording, model used, and transcription formatting. Below is an example of a settings file.
 
-```yml
-
+```yaml
 mic_settings:
   mic_name: "Jabra SPEAK 410 USB: Audio (hw:3,0)" # Linux only
   sample_rate: 16000

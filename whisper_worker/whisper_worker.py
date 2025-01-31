@@ -25,6 +25,8 @@ class WhisperWorker:
         self.recording_device = recording_device
         self.recorder = sr.Recognizer()
 
+        self.processing_rolling_avg_secs = 0.0
+
         print(f"Loading model: {self.settings.transcribe_settings.model}")
         self.audio_model = whisper.load_model(
             self.settings.transcribe_settings.model,
@@ -75,23 +77,23 @@ class WhisperWorker:
 
         result["segments"] = self._deep_convert_np_float_to_float(result["segments"])
 
-        # # Remove any segments that are in the phrases to ignore list.
-        # result["segments"] = [
-        #     segment
-        #     for segment in result["segments"]
-        #     if segment["text"]
-        #     not in self.settings.transcribe_settings.phrases_to_ignore
-        #     or segment["text"] == ""
-        # ]
-
         segments = [Segment(**segment) for segment in result["segments"]]
 
         processing_secs = (datetime.now() - start_time).total_seconds()
+
+        # TODO: Create rolling average window for processing time.
+        self.processing_rolling_avg_secs = (
+            (self.processing_rolling_avg_secs * 0.9 + processing_secs * 0.1)
+            if self.processing_rolling_avg_secs
+            else processing_secs
+        )
+
         return TranscriptionResult(
             text=result["text"].strip(),
             segments=segments,
             language=result["language"],
             processing_secs=processing_secs,
+            processing_rolling_avg_secs=self.processing_rolling_avg_secs,
             local_starttime=local_datetime,
         )
 

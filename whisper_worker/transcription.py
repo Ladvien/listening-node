@@ -57,6 +57,7 @@ class TranscriptionResult:
     language: str
     processing_secs: int
     local_starttime: datetime
+    processing_rolling_avg_secs: float = 0
 
     def __post_init__(self):
         for key, value in self.__dict__.items():
