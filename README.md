@@ -3,6 +3,9 @@ A simple toolset for using [Whisper](https://openai.com/index/whisper/) models t
 
 The `whisper_worker` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The modules is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a settings file (see bottom).
 
+## Disclaimer
+This code was _heavily_ influenced by 
+
 ## Install
 ```
 pip install whisper-worker
@@ -69,34 +72,34 @@ The `TranscriptionResult` object has a `.to_dict()` method that converts the obj
 
 ```json
 {
-    'text': 'This is only a test of words.',
-    'segments': [
+    "text": "This is only a test of words.",
+    "segments": [
         {
-            'id': 0,
-            'seek': 0,
-            'start': 0.0,
-            'end': 1.8,
-            'text': ' This is only a test of words.',
-            'tokens': [50363, 770, 318, 691, 257, 1332, 286, 2456, 13, 50463],
-            'temperature': 0.0,
-            'avg_logprob': -0.43947878750887787,
-            'compression_ratio': 0.8285714285714286,
-            'no_speech_prob': 0.0012085052439942956,
-            'words': [
-                {'word': ' This', 'start': 0.0, 'end': 0.36, 'probability': 0.750191330909729},
-                {'word': ' is', 'start': 0.36, 'end': 0.54, 'probability': 0.997636079788208},
-                {'word': ' only', 'start': 0.54, 'end': 0.78, 'probability': 0.998072624206543},
-                {'word': ' a', 'start': 0.78, 'end': 1.02, 'probability': 0.9984667897224426},
-                {'word': ' test', 'start': 1.02, 'end': 1.28, 'probability': 0.9980781078338623},
-                {'word': ' of', 'start': 1.28, 'end': 1.48, 'probability': 0.99817955493927},
-                {'word': ' words.', 'start': 1.48, 'end': 1.8, 'probability': 0.9987621307373047}
+            "id": 0,
+            "seek": 0,
+            "start": 0.0,
+            "end": 1.8,
+            "text": " This is only a test of words.",
+            "tokens": [50363, 770, 318, 691, 257, 1332, 286, 2456, 13, 50463],
+            "temperature": 0.0,
+            "avg_logprob": -0.43947878750887787,
+            "compression_ratio": 0.8285714285714286,
+            "no_speech_prob": 0.0012085052439942956,
+            "words": [
+                {"word": " This", "start": 0.0, "end": 0.36, "probability": 0.750191330909729},
+                {"word": " is", "start": 0.36, "end": 0.54, "probability": 0.997636079788208},
+                {"word": " only", "start": 0.54, "end": 0.78, "probability": 0.998072624206543},
+                {"word": " a", "start": 0.78, "end": 1.02, "probability": 0.9984667897224426},
+                {"word": " test", "start": 1.02, "end": 1.28, "probability": 0.9980781078338623},
+                {"word": " of", "start": 1.28, "end": 1.48, "probability": 0.99817955493927},
+                {"word": " words.", "start": 1.48, "end": 1.8, "probability": 0.9987621307373047}
             ]
         }
     ],
-    'language': 'en',
-    'processing_secs': 5.410359,
-    'local_starttime': '2025-01-31T06:19:03.322642-06:00',
-    'processing_rolling_avg_secs': 22.098183908976
+    "language": "en",
+    "processing_secs": 5.410359,
+    "local_starttime": "2025-01-31T06:19:03.322642-06:00",
+    "processing_rolling_avg_secs": 22.098183908976
 }
 ```
 
@@ -178,7 +181,7 @@ whisper_worker:
     # defaults to the end of the file.
     clip_timestamps: "0" # "0"
 
-    # When word_timestamps is True, skip silent periods longer
+    # When word_timestamps is True, skip silent periods **longer**
     # than this threshold (in seconds) when a possible
     # hallucination is detected
     hallucination_silence_threshold: None # float | None
