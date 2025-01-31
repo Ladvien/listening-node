@@ -1,7 +1,7 @@
 ## Setup
 A simple toolset for using [Whisper](https://openai.com/index/whisper/) models to transcribe audio in real-time.
 
-The `whisper_worker` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The modules is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a settings file (see bottom).
+The `whisper_worker` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a settings file (see bottom).
 
 ## Disclaimer
 This code was _heavily_ influenced by 
@@ -106,7 +106,7 @@ The `TranscriptionResult` object has a `.to_dict()` method that converts the obj
 ```
 
 ## Settings
-Settings control all aspects of the audio recording, model used, and transcription formatting. Below is an example of a settings file.
+Settings is a `yaml` file enabling control of all aspects of the audio recording, model settings, and transcription formatting. Below is an example of a settings file.
 
 ```yaml
 mic_settings:
