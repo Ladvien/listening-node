@@ -1,11 +1,14 @@
 from rich import print
 import logging
 
-from whisper_worker import Settings,RecordingDevice,WhisperWorker
+from whisper_worker import Settings, RecordingDevice, WhisperWorker
+from whisper_worker.transcription import TranscriptionResult
 
 
-def transcription_callback(text: str, result: dict) -> None:
+def transcription_callback(text: str, result: TranscriptionResult) -> None:
+    print(type(result))
     print(result)
+    print(text)
 
 
 def main():

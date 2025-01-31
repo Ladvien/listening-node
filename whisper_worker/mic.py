@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import speech_recognition
 from rich import print
 
+
 @dataclass
 class MicSettings:
     mic_name: str
@@ -36,7 +37,7 @@ class Mic:
                     )
                     print(f"Found target mic: '{self.settings.mic_name}'")
                     break
-                
+
                 print(f"Target not found: {self.settings.mic_name}")
 
         else:

@@ -4,6 +4,11 @@ from ast import literal_eval
 from typing import List, Optional, Tuple, Union
 from datetime import datetime
 
+PHRASES_TO_IGNORE = [
+    "",
+    "urn.com urn.schemas-microsoft-com.h",
+]
+
 
 @dataclass
 class Word:
@@ -147,12 +152,17 @@ class TranscribeSettings:
     initial_prompt: Optional[str]
     clip_timestamps: Union[str, List[float]]
     hallucination_silence_threshold: Optional[float]
+    phrases_to_ignore: list[str] = None
 
     @classmethod
     def load(cls, data):
         return cls(**data)
 
     def __post_init__(self):
+
+        if self.phrases_to_ignore is None:
+            self.phrases_to_ignore = PHRASES_TO_IGNORE
+
         if isinstance(self.verbose, str):
             self.verbose = literal_eval(self.verbose)
         if isinstance(self.temperature, str):

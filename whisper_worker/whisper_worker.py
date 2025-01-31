@@ -8,19 +8,23 @@ from queue import Queue
 from time import sleep
 from rich import print
 
+from whisper_worker.settings import WhisperWorkerSettings
+
 from .transcription import Segment, TranscriptionResult
 from .recording_device import RecordingDevice
 
 
 class WhisperWorker:
-    # TODO: def __init__(self, args: WhisperWorkerSettings, recording_device: RecordingDevice) -> None:
-    def __init__(self, settings: Any, recording_device: RecordingDevice) -> None:
+    def __init__(
+        self,
+        settings: WhisperWorkerSettings,
+        recording_device: RecordingDevice,
+    ) -> None:
 
         self.settings = settings
         self.recording_device = recording_device
         self.recorder = sr.Recognizer()
 
-        # Load / Download model
         print(f"Loading model: {self.settings.transcribe_settings.model}")
         self.audio_model = whisper.load_model(
             self.settings.transcribe_settings.model,
@@ -57,7 +61,12 @@ class WhisperWorker:
 
         start_time = datetime.now()
         settings = self.settings.transcribe_settings.to_dict()
+
+        # TODO: Would be better if we broke out these settings
+        # into their own dataclass. Then, wouldn't need to delete them.
         del settings["model"]
+        del settings["phrases_to_ignore"]
+
         result = self.audio_model.transcribe(
             audio_np,
             fp16=torch.cuda.is_available(),
@@ -66,13 +75,23 @@ class WhisperWorker:
 
         result["segments"] = self._deep_convert_np_float_to_float(result["segments"])
 
+        # # Remove any segments that are in the phrases to ignore list.
+        # result["segments"] = [
+        #     segment
+        #     for segment in result["segments"]
+        #     if segment["text"]
+        #     not in self.settings.transcribe_settings.phrases_to_ignore
+        #     or segment["text"] == ""
+        # ]
+
         segments = [Segment(**segment) for segment in result["segments"]]
 
+        processing_secs = (datetime.now() - start_time).total_seconds()
         return TranscriptionResult(
             text=result["text"].strip(),
             segments=segments,
             language=result["language"],
-            processing_secs=datetime.now() - start_time,
+            processing_secs=processing_secs,
             local_starttime=local_datetime,
         )
 
@@ -116,7 +135,11 @@ class WhisperWorker:
                     else:
                         self.transcription[-1] = result.text
 
-                    if callback:
+                    if (
+                        callback
+                        and result.text
+                        not in self.settings.transcribe_settings.phrases_to_ignore
+                    ):
                         callback(self.transcription, result)
                 else:
                     # Infinite loops are bad for processors, must sleep.
@@ -125,7 +148,6 @@ class WhisperWorker:
                 break
 
     def _phrase_complete(self, phrase_time: datetime, now: datetime) -> bool:
-
         return phrase_time and now - phrase_time > timedelta(
             seconds=self.settings.phrase_timeout
         )
