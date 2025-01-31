@@ -6,7 +6,7 @@ from whisper_worker.transcription import TranscriptionResult
 
 
 def transcription_callback(text: str, result: TranscriptionResult) -> None:
-    print(result.to_dict())
+    print(result)
 
 
 def main():

@@ -7,9 +7,9 @@ from datetime import datetime, timedelta, timezone
 from queue import Queue
 from time import sleep
 from rich import print
+import logging
 
-from whisper_worker.settings import WhisperWorkerSettings
-
+from .settings import WhisperWorkerSettings
 from .transcription import Segment, TranscriptionResult
 from .recording_device import RecordingDevice
 
@@ -142,6 +142,9 @@ class WhisperWorker:
                         and result.text
                         not in self.settings.transcribe_settings.phrases_to_ignore
                     ):
+                        if self.settings.log:
+                            logging.info(result.text)
+
                         callback(self.transcription, result)
                 else:
                     # Infinite loops are bad for processors, must sleep.

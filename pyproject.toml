@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "whisper-worker"
-version = "0.0.22"
+version = "0.0.23"
 description = ""
 authors = ["C. Thomas Brittain <cthomasbrittain@hotmail.com>"]
 license = "MIT"

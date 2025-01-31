@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from ast import literal_eval
 
 import yaml
 from .mic import MicSettings
@@ -11,6 +12,7 @@ class WhisperWorkerSettings:
     record_timeout: float
     phrase_timeout: float
     in_memory: bool
+    log: bool
     transcribe_settings: TranscribeSettings
 
     @classmethod
