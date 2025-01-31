@@ -3,9 +3,6 @@ A simple toolset for using [Whisper](https://openai.com/index/whisper/) models t
 
 The `whisper_worker` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a settings file (see bottom).
 
-## Disclaimer
-This code was _heavily_ influenced by 
-
 ## Install
 ```
 pip install whisper-worker
