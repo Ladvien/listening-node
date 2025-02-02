@@ -6,7 +6,9 @@ class RecordingDevice:
 
     def __init__(self, mic_settings: MicSettings) -> None:
         self.mic_settings = mic_settings
-        self.mic = Mic(settings=self.mic_settings)
+        self.mic = Mic(
+            settings=self.mic_settings,
+        )
 
         # We use SpeechRecognizer to record our audio because it has a nice
         # feature where it can detect when speech ends.

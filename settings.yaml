@@ -1,5 +1,5 @@
 mic_settings:
-  mic_name: "Jabra SPEAK 410 USB: Audio (hw:3,0)" # Linux only
+  mic_name: "Jabra SPEAK 410 USB: Audio (hw:2,0)" # Linux only
   sample_rate: 16000
   energy_threshold: 3000 # 0-4000
 

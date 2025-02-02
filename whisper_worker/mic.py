@@ -33,12 +33,20 @@ class Mic:
             ):
                 if self.settings.mic_name in name:
                     self.source = speech_recognition.Microphone(
-                        sample_rate=self.settings.sample_rate, device_index=index
+                        sample_rate=self.settings.sample_rate,
+                        device_index=index,
                     )
                     print(f"Found target mic: '{self.settings.mic_name}'")
                     break
 
-                print(f"Target not found: {self.settings.mic_name}")
+            if self.source is None:
+                print(f"Target microphone not found: '{self.settings.mic_name}'")
+                print("Available devices are: ")
+                for index, name in enumerate(
+                    speech_recognition.Microphone.list_microphone_names()
+                ):
+                    print(f'Microphone with name "{name}" found')
+                quit("Exiting...")
 
         else:
             self.source = speech_recognition.Microphone(
