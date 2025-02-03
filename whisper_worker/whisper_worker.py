@@ -30,6 +30,7 @@ class WhisperWorker:
         print(f"Loading model: {self.settings.transcribe_settings.model}")
         self.audio_model = whisper.load_model(
             self.settings.transcribe_settings.model,
+            self.settings.transcribe_settings.device,
             in_memory=self.settings.in_memory,
         )
 
@@ -67,6 +68,7 @@ class WhisperWorker:
         # TODO: Would be better if we broke out these settings
         # into their own dataclass. Then, wouldn't need to delete them.
         del settings["model"]
+        del settings["device"]
         del settings["phrases_to_ignore"]
 
         result = self.audio_model.transcribe(

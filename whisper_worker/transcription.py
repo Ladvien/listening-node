@@ -141,6 +141,7 @@ class TranscribeSettings:
     """
 
     model: str
+    device: str
     verbose: bool | None
     temperature: Union[float, Tuple[float, ...]]
     compression_ratio_threshold: float

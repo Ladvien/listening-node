@@ -17,10 +17,6 @@ pyyaml = "^6.0.2"
 rich = "^13.9.4"
 pip = "^25.0"
 
-[tool.poetry.dev-dependencies]
-black = "^21.12b0"
-
-
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
 
