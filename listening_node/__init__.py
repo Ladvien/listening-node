@@ -1,6 +1,6 @@
 from .logging_config import LoggingConfig
-from .mic import MicSettings, Mic
+from .mic import MicConfig, Mic
 from .recording_device import RecordingDevice
-from .settings import Settings
-from .transcription import TranscribeSettings
+from .config import Config
+from .transcription import TranscribeConfig
 from .listening_node import ListeningNode

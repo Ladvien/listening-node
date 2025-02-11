@@ -2,31 +2,31 @@ from dataclasses import dataclass
 from ast import literal_eval
 
 import yaml
-from .mic import MicSettings
+from .mic import MicConfig
 from .logging_config import LoggingConfig
-from .transcription import TranscribeSettings
+from .transcription import TranscribeConfig
 
 
 @dataclass
-class ListeningNodeSettings:
+class ListeningNodeConfig:
     record_timeout: float
     phrase_timeout: float
     in_memory: bool
     log: bool
-    transcribe_settings: TranscribeSettings
+    transcribe_config: TranscribeConfig
 
     @classmethod
     def load(cls, data):
         return cls(**data)
 
     def __post_init__(self):
-        self.transcribe_settings = TranscribeSettings.load(self.transcribe_settings)
+        self.transcribe_config = TranscribeConfig.load(self.transcribe_config)
 
 
 @dataclass
-class Settings:
-    listening_node: ListeningNodeSettings
-    mic_settings: MicSettings
+class Config:
+    listening_node: ListeningNodeConfig
+    mic_config: MicConfig
     logging_config: LoggingConfig | None = None
 
     @classmethod
@@ -36,7 +36,7 @@ class Settings:
         return cls(**data)
 
     def __post_init__(self):
-        self.listening_node = ListeningNodeSettings.load(self.listening_node)
-        self.mic_settings = MicSettings.load(self.mic_settings)
+        self.listening_node = ListeningNodeConfig.load(self.listening_node)
+        self.mic_config = MicConfig.load(self.mic_config)
         if self.logging_config:
             self.logging_config = LoggingConfig(**self.logging_config)

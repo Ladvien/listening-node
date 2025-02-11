@@ -73,9 +73,9 @@ class TranscriptionResult:
 
 
 @dataclass
-class TranscribeSettings:
+class TranscribeConfig:
     """
-      transcribe_settings:
+      transcribe_config:
     #  'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large', 'large-v3-turbo', 'turbo'
     model: medium
 

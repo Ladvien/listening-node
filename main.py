@@ -1,7 +1,7 @@
 from rich import print
 import logging
 
-from listening_node import Settings, RecordingDevice, ListeningNode
+from listening_node import Config, RecordingDevice, ListeningNode
 from listening_node.transcription import TranscriptionResult
 
 
@@ -10,16 +10,16 @@ def transcription_callback(text: str, result: TranscriptionResult) -> None:
 
 
 def main():
-    settings = Settings.load("settings.yaml")
-    logging.info("Using settings: ")
-    logging.info(settings)
+    config = Config.load("config.yaml")
+    logging.info("Using config: ")
+    logging.info(config)
 
     # Important for linux users.
     # Prevents permanent application hang and crash by using the wrong Microphone
-    print(settings)
-    recording_device = RecordingDevice(settings.mic_settings)
+    print(config)
+    recording_device = RecordingDevice(config.mic_config)
     listening_node = ListeningNode(
-        settings.listening_node,
+        config.listening_node,
         recording_device,
     )
 

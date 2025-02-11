@@ -1,7 +1,7 @@
 ## Setup
 A simple toolset for using [Whisper](https://openai.com/index/whisper/) models to transcribe audio in real-time.
 
-The `listening_node` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a settings file (see bottom).
+The `listening_node` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a config file (see bottom).
 
 ## Install
 ```
@@ -26,17 +26,17 @@ Below is a basic example of how to use the whisper worker to transcribe audio in
 ```python
 from rich import print
 
-from listening_node import Settings, RecordingDevice, ListeningNode, TranscriptionResult
+from listening_node import Config, RecordingDevice, ListeningNode, TranscriptionResult
 
 def transcription_callback(text: str, result: TranscriptionResult) -> None:
     print("Here's what I heard: ")
     print(result)
 
-settings = Settings.load("settings.yaml")
+config = Config.load("config.yaml")
 
-recording_device = RecordingDevice(settings.mic_settings)
+recording_device = RecordingDevice(config.mic_config)
 listening_node = ListeningNode(
-    settings.listening_node,
+    config.listening_node,
     recording_device,
 )
 
@@ -48,7 +48,7 @@ The `transcription_callback` function is called when a transcription is complete
 ### Sending Transcription to REST API
 ```python
 import requests
-from listening_node import Settings, RecordingDevice, ListeningNode, TranscriptionResult
+from listening_node import Config, RecordingDevice, ListeningNode, TranscriptionResult
 
 
 def transcription_callback(text: str, result: TranscriptionResult) -> None:
@@ -58,10 +58,10 @@ def transcription_callback(text: str, result: TranscriptionResult) -> None:
         json={"text": text, "result": result.to_dict()}
     )
 
-settings = Settings.load("settings.yaml")
-recording_device = RecordingDevice(settings.mic_settings)
+config = Config.load("config.yaml")
+recording_device = RecordingDevice(config.mic_config)
 listening_node = ListeningNode(
-    settings.listening_node,
+    config.listening_node,
     recording_device,
 )
 listening_node.listen(transcription_callback)
@@ -102,11 +102,11 @@ The `TranscriptionResult` object has a `.to_dict()` method that converts the obj
 }
 ```
 
-## Settings
-Settings is a `yaml` file enabling control of all aspects of the audio recording, model settings, and transcription formatting. Below is an example of a settings file.
+## Config
+Config is a `yaml` file enabling control of all aspects of the audio recording, model config, and transcription formatting. Below is an example of a config file.
 
 ```yaml
-mic_settings:
+mic_config:
   mic_name: "Jabra SPEAK 410 USB: Audio (hw:3,0)" # Linux only
   sample_rate: 16000
   energy_threshold: 3000 # 0-4000
@@ -115,7 +115,7 @@ listening_node:
   record_timeout: 2 # 0-10
   phrase_timeout: 3 # 0-10
   in_memory: True
-  transcribe_settings:
+  transcribe_config:
     #  'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large', 'large-v3-turbo', 'turbo'
     model: medium.en
 

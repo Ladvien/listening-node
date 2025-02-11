@@ -9,7 +9,7 @@ from time import sleep
 from rich import print
 import logging
 
-from .settings import ListeningNodeSettings
+from .config import ListeningNodeConfig
 from .transcription import Segment, TranscriptionResult
 from .recording_device import RecordingDevice
 
@@ -17,21 +17,21 @@ from .recording_device import RecordingDevice
 class ListeningNode:
     def __init__(
         self,
-        settings: ListeningNodeSettings,
+        config: ListeningNodeConfig,
         recording_device: RecordingDevice,
     ) -> None:
 
-        self.settings = settings
+        self.config = config
         self.recording_device = recording_device
         self.recorder = sr.Recognizer()
 
         self.processing_rolling_avg_secs = 0.0
 
-        print(f"Loading model: {self.settings.transcribe_settings.model}")
+        print(f"Loading model: {self.config.transcribe_config.model}")
         self.audio_model = whisper.load_model(
-            self.settings.transcribe_settings.model,
-            self.settings.transcribe_settings.device,
-            in_memory=self.settings.in_memory,
+            self.config.transcribe_config.model,
+            self.config.transcribe_config.device,
+            in_memory=self.config.in_memory,
         )
 
         # Thread safe Queue for passing data from the threaded recording callback.
@@ -54,7 +54,7 @@ class ListeningNode:
         self.recording_device.recorder.listen_in_background(
             self.recording_device.mic.source,
             record_callback,
-            phrase_time_limit=self.settings.record_timeout,
+            phrase_time_limit=self.config.record_timeout,
         )
 
     def transcribe(self, audio_np: np.ndarray) -> TranscriptionResult:
@@ -63,18 +63,18 @@ class ListeningNode:
         local_datetime = utc_dt.astimezone()  # local time
 
         start_time = datetime.now()
-        settings = self.settings.transcribe_settings.to_dict()
+        config = self.config.transcribe_config.to_dict()
 
-        # TODO: Would be better if we broke out these settings
+        # TODO: Would be better if we broke out these config
         # into their own dataclass. Then, wouldn't need to delete them.
-        del settings["model"]
-        del settings["device"]
-        del settings["phrases_to_ignore"]
+        del config["model"]
+        del config["device"]
+        del config["phrases_to_ignore"]
 
         result = self.audio_model.transcribe(
             audio_np,
             fp16=torch.cuda.is_available(),
-            **settings,
+            **config,
         )
 
         result["segments"] = self._deep_convert_np_float_to_float(result["segments"])
@@ -142,9 +142,9 @@ class ListeningNode:
                     if (
                         callback
                         and result.text
-                        not in self.settings.transcribe_settings.phrases_to_ignore
+                        not in self.config.transcribe_config.phrases_to_ignore
                     ):
-                        if self.settings.log:
+                        if self.config.log:
                             logging.info(result.text)
 
                         callback(self.transcription, result)
@@ -156,7 +156,7 @@ class ListeningNode:
 
     def _phrase_complete(self, phrase_time: datetime, now: datetime) -> bool:
         return phrase_time and now - phrase_time > timedelta(
-            seconds=self.settings.phrase_timeout
+            seconds=self.config.phrase_timeout
         )
 
     def _deep_convert_np_float_to_float(self, data: dict) -> dict:

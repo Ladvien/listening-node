@@ -1,4 +1,4 @@
-mic_settings:
+mic_config:
   mic_name: "Jabra SPEAK 410 USB: Audio (hw:2,0)" # Linux only
   sample_rate: 16000
   energy_threshold: 3000 # 0-4000
@@ -8,7 +8,7 @@ listening_node:
   phrase_timeout: 2 # 0-10
   in_memory: True
   log: True
-  transcribe_settings:
+  transcribe_config:
     # Device
     device: "cpu" # "cuda", "cpu" -- "mps" is not yet supported
 

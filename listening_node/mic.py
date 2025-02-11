@@ -5,7 +5,7 @@ from rich import print
 
 
 @dataclass
-class MicSettings:
+class MicConfig:
     mic_name: str
     sample_rate: int
     energy_threshold: int
@@ -17,7 +17,7 @@ class MicSettings:
 
 @dataclass
 class Mic:
-    settings: MicSettings
+    config: MicConfig
     source: speech_recognition.Microphone | None = None
 
     def __post_init__(self):
@@ -26,7 +26,7 @@ class Mic:
             self._handle_linux()
         else:
             self.source = speech_recognition.Microphone(
-                sample_rate=self.settings.sample_rate
+                sample_rate=self.config.sample_rate
             )
 
     def _handle_linux(self):
@@ -39,16 +39,16 @@ class Mic:
         for index, name in enumerate(
             speech_recognition.Microphone.list_microphone_names()
         ):
-            if self.settings.mic_name in name:
+            if self.config.mic_name in name:
                 self.source = speech_recognition.Microphone(
-                    sample_rate=self.settings.sample_rate,
+                    sample_rate=self.config.sample_rate,
                     device_index=index,
                 )
-                print(f"Found target mic: '{self.settings.mic_name}'")
+                print(f"Found target mic: '{self.config.mic_name}'")
                 break
 
         if self.source is None:
-            print(f"Target microphone not found: '{self.settings.mic_name}'")
+            print(f"Target microphone not found: '{self.config.mic_name}'")
             print("Available devices are: ")
             for index, name in enumerate(
                 speech_recognition.Microphone.list_microphone_names()
