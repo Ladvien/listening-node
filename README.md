@@ -1,11 +1,11 @@
 ## Setup
 A simple toolset for using [Whisper](https://openai.com/index/whisper/) models to transcribe audio in real-time.
 
-The `whisper_worker` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a settings file (see bottom).
+The `listening_node` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a settings file (see bottom).
 
 ## Install
 ```
-pip install whisper-worker
+pip install listening-node
 ```
 
 ## Prerequisites
@@ -26,7 +26,7 @@ Below is a basic example of how to use the whisper worker to transcribe audio in
 ```python
 from rich import print
 
-from whisper_worker import Settings, RecordingDevice, WhisperWorker, TranscriptionResult
+from listening_node import Settings, RecordingDevice, ListeningNode, TranscriptionResult
 
 def transcription_callback(text: str, result: TranscriptionResult) -> None:
     print("Here's what I heard: ")
@@ -35,12 +35,12 @@ def transcription_callback(text: str, result: TranscriptionResult) -> None:
 settings = Settings.load("settings.yaml")
 
 recording_device = RecordingDevice(settings.mic_settings)
-whisper_worker = WhisperWorker(
-    settings.whisper_worker,
+listening_node = ListeningNode(
+    settings.listening_node,
     recording_device,
 )
 
-whisper_worker.listen(transcription_callback)
+listening_node.listen(transcription_callback)
 ```
 
 The `transcription_callback` function is called when a transcription is completed. 
@@ -48,7 +48,7 @@ The `transcription_callback` function is called when a transcription is complete
 ### Sending Transcription to REST API
 ```python
 import requests
-from whisper_worker import Settings, RecordingDevice, WhisperWorker, TranscriptionResult
+from listening_node import Settings, RecordingDevice, ListeningNode, TranscriptionResult
 
 
 def transcription_callback(text: str, result: TranscriptionResult) -> None:
@@ -60,11 +60,11 @@ def transcription_callback(text: str, result: TranscriptionResult) -> None:
 
 settings = Settings.load("settings.yaml")
 recording_device = RecordingDevice(settings.mic_settings)
-whisper_worker = WhisperWorker(
-    settings.whisper_worker,
+listening_node = ListeningNode(
+    settings.listening_node,
     recording_device,
 )
-whisper_worker.listen(transcription_callback)
+listening_node.listen(transcription_callback)
 ```
 
 The `TranscriptionResult` object has a `.to_dict()` method that converts the object to a dictionary, which can be serialized to JSON.
@@ -111,7 +111,7 @@ mic_settings:
   sample_rate: 16000
   energy_threshold: 3000 # 0-4000
 
-whisper_worker:
+listening_node:
   record_timeout: 2 # 0-10
   phrase_timeout: 3 # 0-10
   in_memory: True

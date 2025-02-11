@@ -3,4 +3,4 @@ from .mic import MicSettings, Mic
 from .recording_device import RecordingDevice
 from .settings import Settings
 from .transcription import TranscribeSettings
-from .whisper_worker import WhisperWorker
+from .listening_node import ListeningNode

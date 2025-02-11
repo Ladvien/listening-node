@@ -8,7 +8,7 @@ from .transcription import TranscribeSettings
 
 
 @dataclass
-class WhisperWorkerSettings:
+class ListeningNodeSettings:
     record_timeout: float
     phrase_timeout: float
     in_memory: bool
@@ -25,7 +25,7 @@ class WhisperWorkerSettings:
 
 @dataclass
 class Settings:
-    whisper_worker: WhisperWorkerSettings
+    listening_node: ListeningNodeSettings
     mic_settings: MicSettings
     logging_config: LoggingConfig | None = None
 
@@ -36,7 +36,7 @@ class Settings:
         return cls(**data)
 
     def __post_init__(self):
-        self.whisper_worker = WhisperWorkerSettings.load(self.whisper_worker)
+        self.listening_node = ListeningNodeSettings.load(self.listening_node)
         self.mic_settings = MicSettings.load(self.mic_settings)
         if self.logging_config:
             self.logging_config = LoggingConfig(**self.logging_config)

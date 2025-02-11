@@ -3,17 +3,17 @@ mic_settings:
   sample_rate: 16000
   energy_threshold: 3000 # 0-4000
 
-whisper_worker:
+listening_node:
   record_timeout: 2 # 0-10
   phrase_timeout: 2 # 0-10
   in_memory: True
   log: True
   transcribe_settings:
     # Device
-    device: "cuda" # "cuda", "cpu", "mps"
+    device: "cpu" # "cuda", "cpu" -- "mps" is not yet supported
 
     #  'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large', 'large-v3-turbo', 'turbo'
-    model: "large-v3-turbo.en"
+    model: "large-v3-turbo"
 
     # Whether to display the text being decoded to the console.
     # If True, displays all the details, If False, displays

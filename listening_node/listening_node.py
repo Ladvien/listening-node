@@ -9,15 +9,15 @@ from time import sleep
 from rich import print
 import logging
 
-from .settings import WhisperWorkerSettings
+from .settings import ListeningNodeSettings
 from .transcription import Segment, TranscriptionResult
 from .recording_device import RecordingDevice
 
 
-class WhisperWorker:
+class ListeningNode:
     def __init__(
         self,
-        settings: WhisperWorkerSettings,
+        settings: ListeningNodeSettings,
         recording_device: RecordingDevice,
     ) -> None:
 

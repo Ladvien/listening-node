@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "whisper-worker"
+name = "listening-node"
 version = "0.0.26"
 description = ""
 authors = ["C. Thomas Brittain <cthomasbrittain@hotmail.com>"]

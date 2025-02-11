@@ -1,8 +1,8 @@
 from rich import print
 import logging
 
-from whisper_worker import Settings, RecordingDevice, WhisperWorker
-from whisper_worker.transcription import TranscriptionResult
+from listening_node import Settings, RecordingDevice, ListeningNode
+from listening_node.transcription import TranscriptionResult
 
 
 def transcription_callback(text: str, result: TranscriptionResult) -> None:
@@ -18,14 +18,14 @@ def main():
     # Prevents permanent application hang and crash by using the wrong Microphone
     print(settings)
     recording_device = RecordingDevice(settings.mic_settings)
-    whisper_worker = WhisperWorker(
-        settings.whisper_worker,
+    listening_node = ListeningNode(
+        settings.listening_node,
         recording_device,
     )
 
     # Cue the user that we're ready to go.
     print("Model loaded.\n")
-    whisper_worker.listen(transcription_callback)
+    listening_node.listen(transcription_callback)
 
 
 if __name__ == "__main__":
