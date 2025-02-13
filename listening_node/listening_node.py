@@ -15,6 +15,11 @@ from .recording_device import RecordingDevice
 
 
 class ListeningNode:
+    """
+    A ListeningNode is a class that listens to audio input from a microphone and transcribes it into text.
+    
+    """
+
     def __init__(
         self,
         config: ListeningNodeConfig,

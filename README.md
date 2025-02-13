@@ -1,3 +1,4 @@
+<!-- start setup -->
 ## Setup
 A simple toolset for using [Whisper](https://openai.com/index/whisper/) models to transcribe audio in real-time.
 
@@ -13,6 +14,8 @@ pip install listening-node
 ### MacOS
 1. Install `brew install portaudio`
 
+<!-- end setup -->
+
 ## Attribution
 The core of this code was heavily influenced and includes some code from:
 - https://github.com/davabase/whisper_real_time/tree/master
@@ -20,7 +23,17 @@ The core of this code was heavily influenced and includes some code from:
 
 Huge thanks to [davabase](https://github.com/davabase) for the initial code!  All I've done is wrap it up in a nice package.
 
-## Examples
+<!-- start quick_start -->
+## Quick Start
+
+Install the package and create a config file.
+```
+pip install listening-node
+```
+
+Create a `config.yaml` file with the following content according to configuration options:
+
+
 
 Below is a basic example of how to use the whisper worker to transcribe audio in real-time.
 ```python
@@ -45,11 +58,13 @@ listening_node.listen(transcription_callback)
 
 The `transcription_callback` function is called when a transcription is completed. 
 
-### Sending Transcription to REST API
-```python
+<!-- end quick_start -->
+
+<!-- start advanced_usage -->
+### Send Text to Web API
+```py
 import requests
 from listening_node import Config, RecordingDevice, ListeningNode, TranscriptionResult
-
 
 def transcription_callback(text: str, result: TranscriptionResult) -> None:
     # Send the transcription to a REST API
@@ -101,7 +116,9 @@ The `TranscriptionResult` object has a `.to_dict()` method that converts the obj
     "processing_rolling_avg_secs": 22.098183908976
 }
 ```
+<!-- end advanced_usage -->
 
+<!-- start config -->
 ## Config
 Config is a `yaml` file enabling control of all aspects of the audio recording, model config, and transcription formatting. Below is an example of a config file.
 
@@ -194,3 +211,4 @@ logging_config:
   log_entry_format: "%(asctime)s - %(levelname)s - %(message)s"
   date_format: "%Y-%m-%d %H:%M:%S"
 ```
+<!-- end config -->

@@ -4,6 +4,14 @@ import logging
 
 @dataclass
 class LoggingConfig:
+    """
+    Logging configuration dataclass.
+
+    level: The logging level to use.
+    filepath: The filepath to write the log to.
+    log_entry_format: The format of the log entry.
+    date_format: The format of the date in the log entry.
+    """
     level: int
     filepath: str
     log_entry_format: str
