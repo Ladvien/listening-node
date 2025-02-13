@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "listening-node"
-version = "0.0.28"
+name = "listening_node"
+version = "0.0.29"
 description = ""
 authors = ["C. Thomas Brittain <cthomasbrittain@hotmail.com>"]
 license = "MIT"
