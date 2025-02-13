@@ -16,12 +16,17 @@ pip install listening-node
 
 <!-- end setup -->
 
+## Documentation
+- [Documentation](https://listening-node.readthedocs.io/en/latest/)
+
 ## Attribution
 The core of this code was heavily influenced and includes some code from:
 - https://github.com/davabase/whisper_real_time/tree/master
 - https://github.com/openai/whisper/discussions/608
 
 Huge thanks to [davabase](https://github.com/davabase) for the initial code!  All I've done is wrap it up in a nice package.
+
+
 
 <!-- start quick_start -->
 ## Quick Start
