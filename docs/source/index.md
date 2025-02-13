@@ -1,8 +1,17 @@
 
 ```{include} ../../README.md
 :relative-images:
+:start-after: <!-- start setup -->
+:end-before: <!-- end setup -->
 ```
 
-```{contents} Table of Contents
-:depth: 3
+
+```{toctree}
+:hidden:
+
+quick_start
+config
+advanced_usage
+apidocs/index
 ```
+

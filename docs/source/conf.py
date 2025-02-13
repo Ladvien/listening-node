@@ -17,9 +17,9 @@ release = '0.0.29'
 extensions = [
     "myst_parser",  # Allows Markdown files
     "sphinx.ext.autosectionlabel",  # Adds links to different sections of document
-    "sphinx.ext.autodoc",  # Generates documentation from doc strings
-    "autoapi.extension",  # Automatically document code
+    "autodoc2",
 ]
+
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -37,4 +37,7 @@ html_theme = "furo"
 html_static_path = ['_static']
 
 # https://sphinx-autoapi.readthedocs.io/en/latest/reference/config.html
-autoapi_dirs = ['../../listening_node']
+# autoapi_dirs = ['../../listening_node']
+autodoc2_packages = [
+    '../../listening_node'
+]

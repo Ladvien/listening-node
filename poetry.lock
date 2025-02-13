@@ -1654,6 +1654,28 @@ websockets = ">=11"
 test = ["httpx", "pytest (>=6)"]
 
 [[package]]
+name = "sphinx-autodoc2"
+version = "0.5.0"
+description = "Analyse a python project and create documentation for it."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "sphinx_autodoc2-0.5.0-py3-none-any.whl", hash = "sha256:e867013b1512f9d6d7e6f6799f8b537d6884462acd118ef361f3f619a60b5c9e"},
+    {file = "sphinx_autodoc2-0.5.0.tar.gz", hash = "sha256:7d76044aa81d6af74447080182b6868c7eb066874edc835e8ddf810735b6565a"},
+]
+
+[package.dependencies]
+astroid = ">=2.7,<4"
+tomli = {version = "*", markers = "python_version < \"3.11\""}
+typing-extensions = "*"
+
+[package.extras]
+cli = ["typer[all]"]
+docs = ["furo", "myst-parser", "sphinx (>=4.0.0)"]
+sphinx = ["sphinx (>=4.0.0)"]
+testing = ["pytest", "pytest-cov", "pytest-regressions", "sphinx (>=4.0.0,<7)"]
+
+[[package]]
 name = "sphinx-basic-ng"
 version = "1.0.0b2"
 description = "A modern skeleton for Sphinx themes."
@@ -2219,4 +2241,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10"
-content-hash = "d5017fd87ac7d8e2c0c7bc9842e9e2d91fa378df2e4acbaf09934626cbdbedb0"
+content-hash = "f1771b4a1afce328b5b482be933b6b564a11de993a5bc5f0178bdef1c3326b97"
