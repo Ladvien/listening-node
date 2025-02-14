@@ -34,9 +34,9 @@ Install the package and create a config file.
 pip install listening_neuron
 ```
 
-Create a `config.yaml` file with the following content according to configuration options:
+Create a `config.yaml` file with the following content according to configuration options below.
 
-Below is a basic example of how to use the whisper worker to transcribe audio in real-time.
+Below is a basic example of how to use the listening neuron to transcribe audio in real-time.
 ```python
 from listening_neuron import Config, RecordingDevice, ListeningNeuron, TranscriptionResult
 
