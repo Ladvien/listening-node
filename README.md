@@ -6,7 +6,7 @@ The `listening_neuron` is a wrapper around the whisper library that provides a s
 
 ## Install
 ```
-pip install listening-neuron
+pip install listening_neuron
 ```
 
 ### Prerequisites

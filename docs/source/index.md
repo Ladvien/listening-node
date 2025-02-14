@@ -1,8 +1,8 @@
 
 ```{include} ../../README.md
 :relative-images:
-:start-after: <!-- start setup -->
-:end-before: <!-- end setup -->
+:start-after: <!-- quick_start setup -->
+:end-before: <!-- quick_start setup -->
 ```
 
 
