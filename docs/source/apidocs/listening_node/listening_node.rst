@@ -1,9 +1,9 @@
-:py:mod:`listening_node`
+:py:mod:`listening_neuron`
 ========================
 
-.. py:module:: listening_node
+.. py:module:: listening_neuron
 
-.. autodoc2-docstring:: listening_node
+.. autodoc2-docstring:: listening_neuron
    :allowtitles:
 
 Submodules
@@ -13,9 +13,9 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
-   listening_node.transcription
-   listening_node.config
-   listening_node.logging_config
-   listening_node.mic
-   listening_node.recording_device
-   listening_node.listening_node
+   listening_neuron.transcription
+   listening_neuron.config
+   listening_neuron.logging_config
+   listening_neuron.mic
+   listening_neuron.recording_device
+   listening_neuron.listening_neuron

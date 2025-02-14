@@ -2,22 +2,22 @@
 ## Setup
 A simple toolset for using [Whisper](https://openai.com/index/whisper/) models to transcribe audio in real-time.
 
-The `listening_node` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a config file (see bottom).
+The `listening_neuron` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a config file (see bottom).
 
 ## Install
 ```
-pip install listening-node
+pip install listening-neuron
 ```
 
-## Prerequisites
+### Prerequisites
 
-### MacOS
+#### MacOS
 1. Install `brew install portaudio`
 
 <!-- end setup -->
 
 ## Documentation
-- [Documentation](https://listening-node.readthedocs.io/en/latest/)
+- [Documentation](https://listening-neuron.readthedocs.io/en/latest/)
 
 ## Attribution
 The core of this code was heavily influenced and includes some code from:
@@ -26,25 +26,19 @@ The core of this code was heavily influenced and includes some code from:
 
 Huge thanks to [davabase](https://github.com/davabase) for the initial code!  All I've done is wrap it up in a nice package.
 
-
-
 <!-- start quick_start -->
 ## Quick Start
 
 Install the package and create a config file.
 ```
-pip install listening-node
+pip install listening-neuron
 ```
 
 Create a `config.yaml` file with the following content according to configuration options:
 
-
-
 Below is a basic example of how to use the whisper worker to transcribe audio in real-time.
 ```python
-from rich import print
-
-from listening_node import Config, RecordingDevice, ListeningNode, TranscriptionResult
+from listening_neuron import Config, RecordingDevice, ListeningNeuron, TranscriptionResult
 
 def transcription_callback(text: str, result: TranscriptionResult) -> None:
     print("Here's what I heard: ")
@@ -53,12 +47,12 @@ def transcription_callback(text: str, result: TranscriptionResult) -> None:
 config = Config.load("config.yaml")
 
 recording_device = RecordingDevice(config.mic_config)
-listening_node = ListeningNode(
-    config.listening_node,
+listening_neuron = ListeningNeuron(
+    config.listening_neuron,
     recording_device,
 )
 
-listening_node.listen(transcription_callback)
+listening_neuron.listen(transcription_callback)
 ```
 
 The `transcription_callback` function is called when a transcription is completed. 
@@ -69,7 +63,7 @@ The `transcription_callback` function is called when a transcription is complete
 ### Send Text to Web API
 ```py
 import requests
-from listening_node import Config, RecordingDevice, ListeningNode, TranscriptionResult
+from listening_neuron import Config, RecordingDevice, ListeningNeuron, TranscriptionResult
 
 def transcription_callback(text: str, result: TranscriptionResult) -> None:
     # Send the transcription to a REST API
@@ -80,11 +74,11 @@ def transcription_callback(text: str, result: TranscriptionResult) -> None:
 
 config = Config.load("config.yaml")
 recording_device = RecordingDevice(config.mic_config)
-listening_node = ListeningNode(
-    config.listening_node,
+listening_neuron = ListeningNeuron(
+    config.listening_neuron,
     recording_device,
 )
-listening_node.listen(transcription_callback)
+listening_neuron.listen(transcription_callback)
 ```
 
 The `TranscriptionResult` object has a `.to_dict()` method that converts the object to a dictionary, which can be serialized to JSON.
@@ -133,7 +127,7 @@ mic_config:
   sample_rate: 16000
   energy_threshold: 3000 # 0-4000
 
-listening_node:
+listening_neuron:
   record_timeout: 2 # 0-10
   phrase_timeout: 3 # 0-10
   in_memory: True
