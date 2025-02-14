@@ -132,7 +132,9 @@ listening_neuron:
   phrase_timeout: 3 # 0-10
   in_memory: True
   transcribe_config:
-    #  'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large', 'large-v3-turbo', 'turbo'
+    #  'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 
+    #'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 
+    # 'large', 'large-v3-turbo', 'turbo'
     model: medium.en
 
     # Whether to display the text being decoded to the console.
