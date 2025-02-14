@@ -17,7 +17,7 @@ pip install listening_neuron
 <!-- end setup -->
 
 ## Documentation
-- [Documentation](https://listening-neuron.readthedocs.io/en/latest/)
+- [Documentation](https://listening_neuron.readthedocs.io/en/latest/)
 
 ## Attribution
 The core of this code was heavily influenced and includes some code from:
@@ -31,7 +31,7 @@ Huge thanks to [davabase](https://github.com/davabase) for the initial code!  Al
 
 Install the package and create a config file.
 ```
-pip install listening-neuron
+pip install listening_neuron
 ```
 
 Create a `config.yaml` file with the following content according to configuration options:

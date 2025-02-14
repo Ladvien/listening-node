@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.urls]
 homepage = "https://github.com/Ladvien/speech-node"
 repository = "https://github.com/Ladvien/speech-node"
-documentation = "https://listening-neuron.readthedocs.io/en/latest/"
+documentation = "https://listening_neuron.readthedocs.io/en/latest/"
 
 
 [tool.poetry.dependencies]
@@ -40,6 +40,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 docs         = "sphinx-build docs/source docs/build/html" # a simple command task
+docs_view    = "sphinx-autobuild docs/source docs/build/html" # a simple command task
 patch        = "poetry version patch" # a simple command task
 _publish      = "poetry publish --build" # a simple command task
 release = ["docs", "patch", "_publish"] # a task that depends on other tasks
