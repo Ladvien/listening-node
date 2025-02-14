@@ -4,27 +4,12 @@ A simple toolset for using [Whisper](https://openai.com/index/whisper/) models t
 
 The `listening_neuron` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a config file (see bottom).
 
-## Install
-```
-pip install listening_neuron
-```
-
 ### Prerequisites
 
 #### MacOS
 1. Install `brew install portaudio`
 
 <!-- end setup -->
-
-## Documentation
-- [Documentation](https://listening_neuron.readthedocs.io/en/latest/)
-
-## Attribution
-The core of this code was heavily influenced and includes some code from:
-- https://github.com/davabase/whisper_real_time/tree/master
-- https://github.com/openai/whisper/discussions/608
-
-Huge thanks to [davabase](https://github.com/davabase) for the initial code!  All I've done is wrap it up in a nice package.
 
 <!-- start quick_start -->
 ## Quick Start
@@ -58,6 +43,16 @@ listening_neuron.listen(transcription_callback)
 The `transcription_callback` function is called when a transcription is completed. 
 
 <!-- end quick_start -->
+
+## Documentation
+- [Documentation](https://listening_neuron.readthedocs.io/en/latest/)
+
+## Attribution
+The core of this code was heavily influenced and includes some code from:
+- https://github.com/davabase/whisper_real_time/tree/master
+- https://github.com/openai/whisper/discussions/608
+
+Huge thanks to [davabase](https://github.com/davabase) for the initial code!  All I've done is wrap it up in a nice package.
 
 <!-- start advanced_usage -->
 ### Send Text to Web API
