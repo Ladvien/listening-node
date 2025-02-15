@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "listening_neuron"
-version = "0.0.35"
+version = "0.0.36"
 description = ""
 authors = ["C. Thomas Brittain <cthomasbrittain@hotmail.com>"]
 license = "MIT"

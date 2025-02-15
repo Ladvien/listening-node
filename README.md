@@ -12,6 +12,13 @@ The `listening_neuron` is a wrapper around the whisper library that provides a s
 #### MacOS
 1. Install `brew install portaudio`
 
+#### Linux
+
+##### Ubuntu
+```sh
+sudo apt install portaudio19-dev -y
+```
+
 <!-- end setup -->
 
 <!-- start quick_start -->
