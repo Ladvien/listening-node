@@ -4,6 +4,9 @@ A simple toolset for using [Whisper](https://openai.com/index/whisper/) models t
 
 The `listening_neuron` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a config file (see bottom).
 
+## Other Neuron Modules
+- [Speaking Neuron](https://github.com/Ladvien/speech_neuron) - A simple text-to-speech server using Kokoro models.
+
 ### Prerequisites
 
 #### MacOS
