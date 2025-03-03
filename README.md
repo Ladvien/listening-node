@@ -5,6 +5,7 @@ A simple toolset for using [Whisper](https://openai.com/index/whisper/) models t
 The `listening_tool` is a wrapper around the whisper library that provides a simple interface for transcribing audio in real-time.  The module is designed to be versatile, piping the data to local or remote endpoints for further processing.  All aspects of the transcription can be configured via a config file (see bottom).
 
 ## Other Agent Tools
+- [Thinking Tool](https://github.com/Ladvien/thinking_tool) - an Ollama based LLM server for distributed agentic operations.
 - [Speaking Tool](https://github.com/Ladvien/speech_tool) - A simple text-to-speech server using Kokoro models.
 
 ### Prerequisites
