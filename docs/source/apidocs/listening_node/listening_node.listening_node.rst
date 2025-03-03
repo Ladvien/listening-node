@@ -1,9 +1,9 @@
-:py:mod:`listening_neuron.listening_neuron`
+:py:mod:`listening_tool.listening_tool`
 =======================================
 
-.. py:module:: listening_neuron.listening_neuron
+.. py:module:: listening_tool.listening_tool
 
-.. autodoc2-docstring:: listening_neuron.listening_neuron
+.. autodoc2-docstring:: listening_tool.listening_tool
    :allowtitles:
 
 Module Contents
@@ -16,38 +16,38 @@ Classes
    :class: autosummary longtable
    :align: left
 
-   * - :py:obj:`ListeningNeuron <listening_neuron.listening_neuron.ListeningNeuron>`
-     - .. autodoc2-docstring:: listening_neuron.listening_neuron.ListeningNeuron
+   * - :py:obj:`ListeningTool <listening_tool.listening_tool.ListeningTool>`
+     - .. autodoc2-docstring:: listening_tool.listening_tool.ListeningTool
           :summary:
 
 API
 ~~~
 
-.. py:class:: ListeningNeuron(config: listening_neuron.config.ListeningNeuronConfig, recording_device: listening_neuron.recording_device.RecordingDevice)
-   :canonical: listening_neuron.listening_neuron.ListeningNeuron
+.. py:class:: ListeningTool(config: listening_tool.config.ListeningToolConfig, recording_device: listening_tool.recording_device.RecordingDevice)
+   :canonical: listening_tool.listening_tool.ListeningTool
 
-   .. autodoc2-docstring:: listening_neuron.listening_neuron.ListeningNeuron
+   .. autodoc2-docstring:: listening_tool.listening_tool.ListeningTool
 
    .. rubric:: Initialization
 
-   .. autodoc2-docstring:: listening_neuron.listening_neuron.ListeningNeuron.__init__
+   .. autodoc2-docstring:: listening_tool.listening_tool.ListeningTool.__init__
 
-   .. py:method:: transcribe(audio_np: numpy.ndarray) -> listening_neuron.transcription.TranscriptionResult
-      :canonical: listening_neuron.listening_neuron.ListeningNeuron.transcribe
+   .. py:method:: transcribe(audio_np: numpy.ndarray) -> listening_tool.transcription.TranscriptionResult
+      :canonical: listening_tool.listening_tool.ListeningTool.transcribe
 
-      .. autodoc2-docstring:: listening_neuron.listening_neuron.ListeningNeuron.transcribe
+      .. autodoc2-docstring:: listening_tool.listening_tool.ListeningTool.transcribe
 
    .. py:method:: listen(callback: typing.Optional[typing.Callable[[str, typing.Dict], None]] = None) -> None
-      :canonical: listening_neuron.listening_neuron.ListeningNeuron.listen
+      :canonical: listening_tool.listening_tool.ListeningTool.listen
 
-      .. autodoc2-docstring:: listening_neuron.listening_neuron.ListeningNeuron.listen
+      .. autodoc2-docstring:: listening_tool.listening_tool.ListeningTool.listen
 
    .. py:method:: _phrase_complete(phrase_time: datetime.datetime, now: datetime.datetime) -> bool
-      :canonical: listening_neuron.listening_neuron.ListeningNeuron._phrase_complete
+      :canonical: listening_tool.listening_tool.ListeningTool._phrase_complete
 
-      .. autodoc2-docstring:: listening_neuron.listening_neuron.ListeningNeuron._phrase_complete
+      .. autodoc2-docstring:: listening_tool.listening_tool.ListeningTool._phrase_complete
 
    .. py:method:: _deep_convert_np_float_to_float(data: dict) -> dict
-      :canonical: listening_neuron.listening_neuron.ListeningNeuron._deep_convert_np_float_to_float
+      :canonical: listening_tool.listening_tool.ListeningTool._deep_convert_np_float_to_float
 
-      .. autodoc2-docstring:: listening_neuron.listening_neuron.ListeningNeuron._deep_convert_np_float_to_float
+      .. autodoc2-docstring:: listening_tool.listening_tool.ListeningTool._deep_convert_np_float_to_float

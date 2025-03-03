@@ -1,9 +1,9 @@
-:py:mod:`listening_neuron.recording_device`
+:py:mod:`listening_tool.recording_device`
 ===========================================
 
-.. py:module:: listening_neuron.recording_device
+.. py:module:: listening_tool.recording_device
 
-.. autodoc2-docstring:: listening_neuron.recording_device
+.. autodoc2-docstring:: listening_tool.recording_device
    :allowtitles:
 
 Module Contents
@@ -16,18 +16,18 @@ Classes
    :class: autosummary longtable
    :align: left
 
-   * - :py:obj:`RecordingDevice <listening_neuron.recording_device.RecordingDevice>`
-     - .. autodoc2-docstring:: listening_neuron.recording_device.RecordingDevice
+   * - :py:obj:`RecordingDevice <listening_tool.recording_device.RecordingDevice>`
+     - .. autodoc2-docstring:: listening_tool.recording_device.RecordingDevice
           :summary:
 
 API
 ~~~
 
-.. py:class:: RecordingDevice(mic_config: listening_neuron.mic.MicConfig)
-   :canonical: listening_neuron.recording_device.RecordingDevice
+.. py:class:: RecordingDevice(mic_config: listening_tool.mic.MicConfig)
+   :canonical: listening_tool.recording_device.RecordingDevice
 
-   .. autodoc2-docstring:: listening_neuron.recording_device.RecordingDevice
+   .. autodoc2-docstring:: listening_tool.recording_device.RecordingDevice
 
    .. rubric:: Initialization
 
-   .. autodoc2-docstring:: listening_neuron.recording_device.RecordingDevice.__init__
+   .. autodoc2-docstring:: listening_tool.recording_device.RecordingDevice.__init__

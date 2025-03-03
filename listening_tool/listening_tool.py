@@ -9,20 +9,20 @@ from time import sleep
 from rich import print
 import logging
 
-from .config import ListeningNeuronConfig
+from .config import ListeningToolConfig
 from .transcription import Segment, TranscriptionResult
 from .recording_device import RecordingDevice
 
 
-class ListeningNeuron:
+class ListeningTool:
     """
-    A ListeningNeuron is a class that listens to audio input from a microphone and transcribes it into text.
+    A ListeningTool is a class that listens to audio input from a microphone and transcribes it into text.
 
     """
 
     def __init__(
         self,
-        config: ListeningNeuronConfig,
+        config: ListeningToolConfig,
         recording_device: RecordingDevice,
     ) -> None:
 

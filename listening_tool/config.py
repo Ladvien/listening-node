@@ -8,7 +8,7 @@ from .transcription import TranscribeConfig
 
 
 @dataclass
-class ListeningNeuronConfig:
+class ListeningToolConfig:
     record_timeout: float
     phrase_timeout: float
     in_memory: bool
@@ -25,7 +25,7 @@ class ListeningNeuronConfig:
 
 @dataclass
 class Config:
-    listening_neuron: ListeningNeuronConfig
+    listening_tool: ListeningToolConfig
     mic_config: MicConfig
     logging_config: LoggingConfig | None = None
 
@@ -36,7 +36,7 @@ class Config:
         return cls(**data)
 
     def __post_init__(self):
-        self.listening_neuron = ListeningNeuronConfig.load(self.listening_neuron)
+        self.listening_tool = ListeningToolConfig.load(self.listening_tool)
         self.mic_config = MicConfig.load(self.mic_config)
         if self.logging_config:
             self.logging_config = LoggingConfig(**self.logging_config)

@@ -3,7 +3,7 @@ mic_config:
   sample_rate: 16000
   energy_threshold: 3000 # 0-4000
 
-listening_neuron:
+listening_tool:
   record_timeout: 2 # 0-10
   phrase_timeout: 2 # 0-10
   in_memory: True

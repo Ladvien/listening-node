@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "listening_neuron"
+name = "listening_tool"
 version = "0.0.36"
 description = ""
 authors = ["C. Thomas Brittain <cthomasbrittain@hotmail.com>"]
@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.urls]
 homepage = "https://github.com/Ladvien/speech-node"
 repository = "https://github.com/Ladvien/speech-node"
-documentation = "https://listening_neuron.readthedocs.io/en/latest/"
+documentation = "https://listening_tool.readthedocs.io/en/latest/"
 
 
 [tool.poetry.dependencies]
